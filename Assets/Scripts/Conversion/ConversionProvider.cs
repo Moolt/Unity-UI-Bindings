@@ -15,7 +15,7 @@ public static class ConversionProvider
         }
     }
 
-    public static IEnumerable<string> AvailableConverterNames => AvailableConverters.Select(c => c.Name);
+    public static IEnumerable<string> AvailableConverterNames => AvailableConverters.Select(c => c.Name.Replace("Converter", string.Empty));
 
     public static IValueConverter Instantiate(ConverterIndex converter)
     {
