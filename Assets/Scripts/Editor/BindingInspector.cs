@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [CustomEditor(typeof(PropertyBinding))]
 public class BindingInspector : Editor
@@ -22,23 +23,26 @@ public class BindingInspector : Editor
 
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
+        EditorGUILayout.Space();
 
-        _sourceProperties.ChangeTargetTypeIfNecessary(_binding.SourceType);
         _targetProperties.ChangeTargetTypeIfNecessary(_binding.TargetType);
+        _sourceProperties.ChangeTargetTypeIfNecessary(_binding.SourceType);
+
+        _binding.Source = (BindableMonoBehaviour)EditorGUILayout.ObjectField("Source", _binding.Source, _binding.SourceType, true);
+        _binding.Target = (UIBehaviour)EditorGUILayout.ObjectField("Target", _binding.Target, _binding.TargetType, true);
+
 
         if (!_binding.HasSourceAndTarget)
         {
             return;
         }
 
-        _binding.SourceIndex = EditorGUILayout.Popup(" ", _binding.SourceIndex, _sourceProperties.PropertyNames);
-        _binding.TargetIndex = EditorGUILayout.Popup(" ", _binding.TargetIndex, _targetProperties.PropertyNames);
+        GuiLine();
 
-        if (!_binding.HasMatchingTypes)
-        {
-            EditorGUILayout.HelpBox("Source type differs from target type.\nConsider using a value converter.", MessageType.Warning);
-        }
+        _binding.SourceIndex = EditorGUILayout.Popup("Source Property", _binding.SourceIndex, _sourceProperties.PropertyNames);
+        _binding.TargetIndex = EditorGUILayout.Popup("Target Property", _binding.TargetIndex, _targetProperties.PropertyNames);
+
+        GuiLine();
 
         _binding.ConverterIndex = EditorGUILayout.Popup("Conversion", _binding.ConverterIndex + 1, _converters) - 1;
     }
@@ -48,5 +52,18 @@ public class BindingInspector : Editor
         var converters = new List<string>() { "Default" };
         converters.AddRange(ConversionProvider.AvailableConverterNames);
         return converters.ToArray();
+    }
+
+    /// <summary>
+    /// See: https://forum.unity.com/threads/horizontal-line-in-editor-window.520812/
+    /// Also: How does Unity still doesn't have this implemented?
+    /// </summary>
+    private void GuiLine()
+    {
+        EditorGUILayout.Space();
+        var rect = EditorGUILayout.GetControlRect(false, 1);
+        rect.height = 1;
+        EditorGUI.DrawRect(rect, new Color(0.5f, 0.5f, 0.5f, 1));
+        EditorGUILayout.Space();
     }
 }
