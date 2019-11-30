@@ -28,4 +28,6 @@ public class ConverterIndex
     }
 
     public bool IsDefault => _index < 0;
+
+    public static int Default => -1;
 }

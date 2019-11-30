@@ -8,10 +8,10 @@ public class PropertyBinding : MonoBehaviour
 {
     [SerializeField] private BindableMonoBehaviour _source;
     [SerializeField] private UIBehaviour _target;
-
-    [HideInInspector] [SerializeField] private PropertyIndex _sourceIndex;
-    [HideInInspector] [SerializeField] private PropertyIndex _targetIndex;
-    [HideInInspector] [SerializeField] private ConverterIndex _converterIndex;
+    [SerializeField] private PropertyIndex _sourceIndex;
+    [SerializeField] private PropertyIndex _targetIndex;
+    [SerializeField] private ConverterIndex _converterIndex;
+    [SerializeField] private BindingMode _bindingMode;
 
     private PropertyInfo _sourceProperty;
     private PropertyInfo _targetProperty;
@@ -28,10 +28,16 @@ public class PropertyBinding : MonoBehaviour
         _converter = _converterIndex.ResolveFor(this);
 
         // Listen for changes of the source
-        _source.PropertyChanged += OnSourceChanged;
+        if (_bindingMode != BindingMode.OneTime)
+        {
+            _source.PropertyChanged += OnSourceChanged;
+        }
 
         // Listen for changes of the target
-        UiEventLookup.RegisterIfEventExistsFor(_target, _targetProperty, OnTargetChanged);
+        if (_bindingMode == BindingMode.TwoWay)
+        {
+            UiEventLookup.RegisterIfEventExistsFor(_target, _targetProperty, OnTargetChanged);
+        }
 
         // Retrieve the initial value from the source.
         InitializeValue();
@@ -65,6 +71,12 @@ public class PropertyBinding : MonoBehaviour
     {
         get => _converterIndex;
         set => _converterIndex = value;
+    }
+
+    public BindingMode BindingMode
+    {
+        get => _bindingMode;
+        set => _bindingMode = value;
     }
 
     public Type SourceType => _source?.GetType();

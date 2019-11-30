@@ -12,6 +12,7 @@ public static class UiEventLookup
     {
         [(typeof(Slider), "value")] = "onValueChanged",
         [(typeof(InputField), "text")] = "onValueChanged",
+        [(typeof(Toggle), "isOn")] = "onValueChanged",
     };
 
     public static void RegisterEvent<T>(string eventName, string propertyName)
@@ -53,11 +54,15 @@ public static class UiEventLookup
         var eventInstance = uiEvent.GetValue(instance);
         var addListener = uiEvent.PropertyType.GetMethod("AddListener");
         addListener.Invoke(eventInstance, new object[] { unityAction });
-
     }
 
     public static UnityAction<T> UnityActionFromCallback<T>(Action<object> callback)
     {
         return new UnityAction<T>((v) => callback(v));
+    }
+
+    public static bool HasEventFor(Type uiType, string propertyName)
+    {
+        return _lookup.ContainsKey((uiType, propertyName));
     }
 }

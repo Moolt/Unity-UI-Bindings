@@ -1,1 +1,6 @@
-﻿public enum BindingMode { OneWay, OneTime, TwoWay }
+﻿public enum BindingMode
+{
+    TwoWay,
+    OneWay,
+    OneTime,
+}
