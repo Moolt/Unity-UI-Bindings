@@ -11,16 +11,30 @@ public class PropertyBinding : MonoBehaviour
 
     [HideInInspector] [SerializeField] private PropertyIndex _sourceIndex;
     [HideInInspector] [SerializeField] private PropertyIndex _targetIndex;
+    [HideInInspector] [SerializeField] private ConverterIndex _converterIndex;
 
     private PropertyInfo _sourceProperty;
     private PropertyInfo _targetProperty;
+    private IValueConverter _converter;
 
     private void Awake()
     {
+        // Resolve an actual PropertyInfo from the serialized index
         _sourceProperty = _sourceIndex.ResolveFrom(_source);
         _targetProperty = _targetIndex.ResolveFrom(_target);
+
+        // Resolve the selected converter. 
+        // If no converter has been specified, a default converter will be used instead.
+        _converter = _converterIndex.ResolveFor(this);
+
+        // Listen for changes of the source
         _source.PropertyChanged += OnSourceChanged;
+
+        // Listen for changes of the target
         UiEventLookup.RegisterIfEventExistsFor(_target, _targetProperty, OnTargetChanged);
+
+        // Retrieve the initial value from the source.
+        InitializeValue();
     }
 
     public BindableMonoBehaviour Source
@@ -47,6 +61,12 @@ public class PropertyBinding : MonoBehaviour
         set => _targetIndex = value;
     }
 
+    public int ConverterIndex
+    {
+        get => _converterIndex;
+        set => _converterIndex = value;
+    }
+
     public Type SourceType => _source?.GetType();
 
     public Type TargetType => _target?.GetType();
@@ -66,20 +86,18 @@ public class PropertyBinding : MonoBehaviour
     private void OnSourceChanged(object sender, PropertyChangedEventArgs e)
     {
         var sourceValue = _sourceProperty.GetValue(_source);
-
-        if (TargetPropertyType != SourcePropertyType)
-        {
-            var convertedValue = Convert.ChangeType(sourceValue, TargetPropertyType);
-            _targetProperty.SetValue(_target, convertedValue);
-            return;
-        }
-
-        _targetProperty.SetValue(_target, sourceValue);
+        var converted = _converter.Convert(sourceValue);
+        _targetProperty.SetValue(_target, converted);
     }
 
     private void OnTargetChanged(object value)
     {
-        Debug.Log(value);
-        _sourceProperty.SetValue(_source, value);
+        var converted = _converter.ConvertBack(value);
+        _sourceProperty.SetValue(_source, converted);
+    }
+
+    private void InitializeValue()
+    {
+        OnSourceChanged(this, new PropertyChangedEventArgs(_sourceProperty.Name));
     }
 }

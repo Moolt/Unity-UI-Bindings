@@ -2,7 +2,7 @@
 
 public class ExampleDataSource : BindableMonoBehaviour
 {
-    private float _sliderValue;
+    private float _sliderValue = 0.5f;
     private string _someText;
 
     public float SliderValue
