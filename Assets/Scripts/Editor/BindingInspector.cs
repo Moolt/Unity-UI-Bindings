@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(PropertyBinding))]
@@ -7,6 +8,7 @@ public class BindingInspector : Editor
     [SerializeField] private PropertyBinding _binding;
     [SerializeField] private PropertiesCollection _sourceProperties;
     [SerializeField] private PropertiesCollection _targetProperties;
+    [SerializeField] private string[] _converters;
 
     private void OnEnable()
     {
@@ -14,6 +16,8 @@ public class BindingInspector : Editor
 
         _sourceProperties = PropertiesCollection.For(_binding.SourceType);
         _targetProperties = PropertiesCollection.For(_binding.TargetType);
+
+        _converters = AssembleConverterList();
     }
 
     public override void OnInspectorGUI()
@@ -35,5 +39,14 @@ public class BindingInspector : Editor
         {
             EditorGUILayout.HelpBox("Source type differs from target type.\nConsider using a value converter.", MessageType.Warning);
         }
+
+        _binding.ConverterIndex = EditorGUILayout.Popup("Conversion", _binding.ConverterIndex + 1, _converters) - 1;
+    }
+
+    private string[] AssembleConverterList()
+    {
+        var converters = new List<string>() { "Default" };
+        converters.AddRange(ConversionProvider.AvailableConverterNames);
+        return converters.ToArray();
     }
 }
