@@ -18,8 +18,8 @@ public class BindingInspector : Editor
     {
         _binding = target as PropertyBinding;
 
-        _sourceProperties = PropertiesCollection.For(_binding.SourceType);
-        _targetProperties = PropertiesCollection.For(_binding.TargetType);
+        _sourceProperties = PropertiesCollection.For(_binding.SourceType).WithBindingFlags(PropertyBindingFlags.Source);
+        _targetProperties = PropertiesCollection.For(_binding.TargetType).WithBindingFlags(PropertyBindingFlags.Target);
 
         _converters = AssembleConverterList();
     }

@@ -20,8 +20,8 @@ public class PropertyBinding : MonoBehaviour
     private void Awake()
     {
         // Resolve an actual PropertyInfo from the serialized index
-        _sourceProperty = _sourceIndex.ResolveFrom(_source);
-        _targetProperty = _targetIndex.ResolveFrom(_target);
+        _sourceProperty = _sourceIndex.ResolveFrom(_source, PropertyBindingFlags.Source);
+        _targetProperty = _targetIndex.ResolveFrom(_target, PropertyBindingFlags.Target);
 
         // Resolve the selected converter. 
         // If no converter has been specified, a default converter will be used instead.

@@ -155,7 +155,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 27.199951, y: -28.950012}
-  m_SizeDelta: {x: 598.7, y: 189.1}
+  m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &75411369
 MonoBehaviour:
@@ -203,8 +203,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -220,7 +220,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: -1
+  m_firstOverflowCharacterIndex: 12
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -249,7 +249,7 @@ MonoBehaviour:
     spaceCount: 2
     wordCount: 3
     linkCount: 0
-    lineCount: 1
+    lineCount: 2
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -331,6 +331,9 @@ MonoBehaviour:
     _index: 0
   _targetIndex:
     _index: 4
+  _converterIndex:
+    _index: -1
+  _bindingMode: 0
 --- !u!114 &100045706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,6 +432,9 @@ MonoBehaviour:
     _index: 0
   _targetIndex:
     _index: 6
+  _converterIndex:
+    _index: -1
+  _bindingMode: 0
 --- !u!114 &257791539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -764,7 +770,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 1e-43, w: 0.1953125}
+  m_BoundingSphereOverride: {x: 1e-45, y: 1.56e-43, z: 0.23046875, w: 0.03125}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -842,6 +848,9 @@ MonoBehaviour:
     _index: 1
   _targetIndex:
     _index: 1
+  _converterIndex:
+    _index: -1
+  _bindingMode: 0
 --- !u!114 &845653189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -959,6 +968,9 @@ MonoBehaviour:
     _index: 0
   _targetIndex:
     _index: 3
+  _converterIndex:
+    _index: -1
+  _bindingMode: 0
 --- !u!1 &933578323
 GameObject:
   m_ObjectHideFlags: 0
@@ -1048,6 +1060,7 @@ GameObject:
   - component: {fileID: 942653843}
   - component: {fileID: 942653842}
   - component: {fileID: 942653841}
+  - component: {fileID: 942653844}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1154,6 +1167,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 942653839}
   m_CullTransparentMesh: 0
+--- !u!114 &942653844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942653839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74059149b822f2c40ae30900c99efc0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _source: {fileID: 1490834007}
+  _target: {fileID: 942653842}
+  _sourceIndex:
+    _index: 0
+  _targetIndex:
+    _index: 26
+  _converterIndex:
+    _index: 0
+  _bindingMode: 1
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ using System.Reflection;
 public class PropertiesCollection : List<PropertyInfo>
 {
     private Type _type;
-    private BindingFlags _bindingFlags = PropertyBindingFlags.Default;
+    private BindingFlags _bindingFlags;
 
     private PropertiesCollection(Type type)
     {

@@ -2,5 +2,6 @@
 
 public static class PropertyBindingFlags
 {
-    public const BindingFlags Default = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance;
+    public const BindingFlags Source = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance;
+    public const BindingFlags Target = BindingFlags.Public | BindingFlags.Instance;
 }

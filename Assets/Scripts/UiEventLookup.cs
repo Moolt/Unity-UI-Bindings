@@ -25,11 +25,6 @@ public static class UiEventLookup
         _lookup[(uiElementType, propertyName)] = eventName;
     }
 
-    public static void RegisterIfEventExistsFor<T>(PropertyInfo property, Action<object> callback)
-    {
-        //RegisterIfEventExistsFor(typeof(T), property, callback);
-    }
-
     public static void RegisterIfEventExistsFor(UIBehaviour instance, PropertyInfo property, Action<object> callback)
     {
         if (!_lookup.TryGetValue((property.DeclaringType, property.Name), out var eventName))
@@ -38,7 +33,7 @@ public static class UiEventLookup
         }
 
         var uiEvent = property.DeclaringType
-            .GetProperties(PropertyBindingFlags.Default)
+            .GetProperties(PropertyBindingFlags.Target)
             .Where(p => p.Name == eventName)
             .FirstOrDefault();
 

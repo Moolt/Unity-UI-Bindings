@@ -7,10 +7,10 @@ public struct PropertyIndex
 {
     [SerializeField] private int _index;
 
-    public PropertyInfo ResolveFrom(object target)
+    public PropertyInfo ResolveFrom(object target, BindingFlags bindingFlags)
     {
         var targetType = target.GetType();
-        var properties = targetType.GetProperties(PropertyBindingFlags.Default);
+        var properties = targetType.GetProperties(bindingFlags);
         return properties[_index];
     }
 
