@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [CustomEditor(typeof(PropertyBinding))]
-public class BindingInspector : Editor
+public class PropertyBindingInspector : Editor
 {
     [SerializeField] private PropertyBinding _binding;
     [SerializeField] private PropertiesCollection _sourceProperties;
