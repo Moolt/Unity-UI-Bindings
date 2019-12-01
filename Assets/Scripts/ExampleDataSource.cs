@@ -1,4 +1,21 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Windows.Input;
+using UnityEngine;
+
+public class Command : ICommand
+{
+    public event EventHandler CanExecuteChanged;
+
+    public bool CanExecute(object parameter)
+    {
+        return true;
+    }
+
+    public void Execute(object parameter)
+    {
+        Debug.Log("command executed");
+    }
+}
 
 public class ExampleDataSource : BindableMonoBehaviour
 {
@@ -23,4 +40,16 @@ public class ExampleDataSource : BindableMonoBehaviour
             SliderValue += .05f;
         }
     }
+
+    public void ButtonPressed()
+    {
+        Debug.Log("Button was pressed!");
+    }
+
+    public void Scrolled(float value)
+    {
+        Debug.Log(value + "scroll!");
+    }
+
+    public ICommand ButtonPressedCommand => new Command();
 }

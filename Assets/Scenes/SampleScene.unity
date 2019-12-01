@@ -325,12 +325,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74059149b822f2c40ae30900c99efc0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _source: {fileID: 1490834007}
-  _target: {fileID: 100045706}
   _sourceIndex:
     _index: 0
   _targetIndex:
     _index: 4
+  _source: {fileID: 1490834007}
+  _target: {fileID: 100045706}
   _converterIndex:
     _index: -1
   _bindingMode: 0
@@ -385,6 +385,7 @@ GameObject:
   - component: {fileID: 257791537}
   - component: {fileID: 257791539}
   - component: {fileID: 257791538}
+  - component: {fileID: 257791540}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -426,12 +427,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74059149b822f2c40ae30900c99efc0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _source: {fileID: 1490834007}
-  _target: {fileID: 257791539}
   _sourceIndex:
     _index: 0
   _targetIndex:
     _index: 6
+  _source: {fileID: 1490834007}
+  _target: {fileID: 257791539}
   _converterIndex:
     _index: -1
   _bindingMode: 0
@@ -485,6 +486,24 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &257791540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257791536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21b5912431de86f47bc006943ae8aebe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sourceIndex:
+    _index: 5
+  _targetIndex:
+    _index: 8
+  _source: {fileID: 1490834007}
+  _target: {fileID: 257791539}
 --- !u!1 &426479376
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,12 +861,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74059149b822f2c40ae30900c99efc0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _source: {fileID: 1490834007}
-  _target: {fileID: 845653189}
   _sourceIndex:
     _index: 1
   _targetIndex:
     _index: 1
+  _source: {fileID: 1490834007}
+  _target: {fileID: 845653189}
   _converterIndex:
     _index: -1
   _bindingMode: 0
@@ -962,12 +981,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74059149b822f2c40ae30900c99efc0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _source: {fileID: 1490834007}
-  _target: {fileID: 845653189}
   _sourceIndex:
     _index: 0
   _targetIndex:
     _index: 3
+  _source: {fileID: 1490834007}
+  _target: {fileID: 845653189}
   _converterIndex:
     _index: -1
   _bindingMode: 0
@@ -1061,6 +1080,7 @@ GameObject:
   - component: {fileID: 942653842}
   - component: {fileID: 942653841}
   - component: {fileID: 942653844}
+  - component: {fileID: 942653845}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1179,15 +1199,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74059149b822f2c40ae30900c99efc0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _source: {fileID: 1490834007}
-  _target: {fileID: 942653842}
   _sourceIndex:
     _index: 0
   _targetIndex:
     _index: 26
+  _source: {fileID: 1490834007}
+  _target: {fileID: 942653842}
   _converterIndex:
     _index: 0
   _bindingMode: 1
+--- !u!114 &942653845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942653839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21b5912431de86f47bc006943ae8aebe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sourceIndex:
+    _index: 4
+  _targetIndex:
+    _index: 0
+  _source: {fileID: 1490834007}
+  _target: {fileID: 942653841}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

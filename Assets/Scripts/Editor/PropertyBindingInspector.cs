@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,8 +10,8 @@ using UnityEngine.EventSystems;
 public class PropertyBindingInspector : Editor
 {
     [SerializeField] private PropertyBinding _binding;
-    [SerializeField] private PropertiesCollection _sourceProperties;
-    [SerializeField] private PropertiesCollection _targetProperties;
+    [SerializeField] private MemberCollection<PropertyInfo> _sourceProperties;
+    [SerializeField] private MemberCollection<PropertyInfo> _targetProperties;
     [SerializeField] private string[] _converters;
     [SerializeField] private string[] _bindingModes = Enum.GetNames(typeof(BindingMode)).ToArray();
 
@@ -18,8 +19,8 @@ public class PropertyBindingInspector : Editor
     {
         _binding = target as PropertyBinding;
 
-        _sourceProperties = PropertiesCollection.For(_binding.SourceType).WithBindingFlags(PropertyBindingFlags.Source);
-        _targetProperties = PropertiesCollection.For(_binding.TargetType).WithBindingFlags(PropertyBindingFlags.Target);
+        _sourceProperties = PropertyCollection.For(_binding.SourceType).WithBindingFlags(PropertyBindingFlags.Source);
+        _targetProperties = PropertyCollection.For(_binding.TargetType).WithBindingFlags(PropertyBindingFlags.Target);
 
         _converters = AssembleConverterList();
     }
@@ -42,8 +43,8 @@ public class PropertyBindingInspector : Editor
 
         GuiLine();
 
-        _binding.SourceIndex = EditorGUILayout.Popup("Source Property", _binding.SourceIndex, _sourceProperties.PropertyNames);
-        _binding.TargetIndex = EditorGUILayout.Popup("Target Property", _binding.TargetIndex, _targetProperties.PropertyNames);
+        _binding.SourceIndex = EditorGUILayout.Popup("Source Property", _binding.SourceIndex, Nicify(_sourceProperties.Names));
+        _binding.TargetIndex = EditorGUILayout.Popup("Target Property", _binding.TargetIndex, Nicify(_targetProperties.Names));
         _binding.BindingMode = (BindingMode)EditorGUILayout.Popup("Mode", (int)_binding.BindingMode, _bindingModes);
 
         if (!TwoWayAvailable && _binding.BindingMode == BindingMode.TwoWay)
@@ -87,5 +88,10 @@ public class PropertyBindingInspector : Editor
     private bool TwoWayAvailable =>
         _binding != null &&
         _binding.HasSourceAndTarget &&
-        UiEventLookup.HasEventFor(_binding.TargetType, _targetProperties.PropertyNames[_binding.TargetIndex]);
+        UiEventLookup.HasEventFor(_binding.TargetType, _targetProperties.Names[_binding.TargetIndex]);
+
+    private string[] Nicify(string[] input)
+    {
+        return input.Select(s => ObjectNames.NicifyVariableName(s)).ToArray();
+    }
 }

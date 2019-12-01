@@ -25,14 +25,14 @@ public static class UiEventLookup
         _lookup[(uiElementType, propertyName)] = eventName;
     }
 
-    public static void RegisterIfEventExistsFor(UIBehaviour instance, PropertyInfo property, Action<object> callback)
+    public static void RegisterIfEventExistsFor(UIBehaviour instance, PropertyInfo targetProperty, Action<object> callback)
     {
-        if (!_lookup.TryGetValue((property.DeclaringType, property.Name), out var eventName))
+        if (!_lookup.TryGetValue((targetProperty.DeclaringType, targetProperty.Name), out var eventName))
         {
             return;
         }
 
-        var uiEvent = property.DeclaringType
+        var uiEvent = targetProperty.DeclaringType
             .GetProperties(PropertyBindingFlags.Target)
             .Where(p => p.Name == eventName)
             .FirstOrDefault();
@@ -42,22 +42,71 @@ public static class UiEventLookup
             return;
         }
 
-        var magicMethod = typeof(UiEventLookup).GetMethod("UnityActionFromCallback");
-        var genericMethod = magicMethod.MakeGenericMethod(property.PropertyType);
-        var unityAction = genericMethod.Invoke(null, new object[] { callback });
-
-        var eventInstance = uiEvent.GetValue(instance);
-        var addListener = uiEvent.PropertyType.GetMethod("AddListener");
-        addListener.Invoke(eventInstance, new object[] { unityAction });
+        var unityAction = UnityActionFor(targetProperty.PropertyType, callback);
+        RegisterAction(instance, uiEvent, unityAction);
     }
 
-    public static UnityAction<T> UnityActionFromCallback<T>(Action<object> callback)
+    public static void RegisterForEvent(UIBehaviour instance, PropertyInfo targetProperty, MethodInfo sourceMethod, Action<object> callback)
     {
-        return new UnityAction<T>((v) => callback(v));
+        object unityAction;
+        var parameters = sourceMethod.GetParameters();
+
+        if (parameters.Length > 1)
+        {
+            return;
+        }
+
+        if (parameters.Length == 1)
+        {
+            var parameter = parameters.FirstOrDefault();
+
+            if (parameter == null)
+            {
+                return;
+            }
+
+            var parameterType = parameter.ParameterType;
+            unityAction = UnityActionFor(parameterType, callback);
+        }
+        else
+        {
+            unityAction = UnityActionFor(callback);
+        }
+
+        RegisterAction(instance, targetProperty, unityAction);
     }
 
     public static bool HasEventFor(Type uiType, string propertyName)
     {
         return _lookup.ContainsKey((uiType, propertyName));
+    }
+
+    public static UnityAction<T> GenericUnityActionFromCallback<T>(Action<object> callback)
+    {
+        return new UnityAction<T>((v) => callback(v));
+    }
+
+    public static UnityAction UnityActionFromCallback(Action<object> callback)
+    {
+        return new UnityAction(() => callback(null));
+    }
+
+    private static object UnityActionFor(Type type, Action<object> callback)
+    {
+        var magicMethod = typeof(UiEventLookup).GetMethod(nameof(UiEventLookup.GenericUnityActionFromCallback));
+        var genericMethod = magicMethod.MakeGenericMethod(type);
+        return genericMethod.Invoke(null, new object[] { callback });
+    }
+
+    private static object UnityActionFor(Action<object> callback)
+    {
+        return UnityActionFromCallback(callback);
+    }
+
+    private static void RegisterAction(UIBehaviour instance, PropertyInfo eventProperty, object unityAction)
+    {
+        var eventInstance = eventProperty.GetValue(instance);
+        var addListener = eventProperty.PropertyType.GetMethod("AddListener");
+        addListener.Invoke(eventInstance, new object[] { unityAction });
     }
 }
