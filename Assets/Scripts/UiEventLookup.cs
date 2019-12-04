@@ -13,6 +13,7 @@ public static class UiEventLookup
         [(typeof(Slider), "value")] = "onValueChanged",
         [(typeof(InputField), "text")] = "onValueChanged",
         [(typeof(Toggle), "isOn")] = "onValueChanged",
+        [(typeof(Scrollbar), "value")] = "onValueChanged",
     };
 
     public static void RegisterEvent<T>(string eventName, string propertyName)
@@ -32,18 +33,32 @@ public static class UiEventLookup
             return;
         }
 
-        var uiEvent = targetProperty.DeclaringType
+        // Unity is inconsistent about how they define Events.
+        // They may be properties, as they should be, or public fields, as they absolutely shouldn't be.
+        PropertyInfo uiEventProperty = targetProperty.DeclaringType
             .GetProperties(PropertyBindingFlags.Target)
             .Where(p => p.Name == eventName)
             .FirstOrDefault();
 
-        if (uiEvent == null)
+        FieldInfo uiEventField = targetProperty.DeclaringType
+            .GetFields(PropertyBindingFlags.Target)
+            .Where(p => p.Name == eventName)
+            .FirstOrDefault();
+
+        if (uiEventProperty == null && uiEventField == null)
         {
             return;
         }
 
         var unityAction = UnityActionFor(targetProperty.PropertyType, callback);
-        RegisterAction(instance, uiEvent, unityAction);
+
+        if (uiEventProperty != null)
+        {
+            RegisterAction(instance, uiEventProperty, unityAction);
+            return;
+        }
+
+        RegisterAction(instance, uiEventField, unityAction);
     }
 
     public static void RegisterForEvent(UIBehaviour instance, PropertyInfo targetProperty, MethodInfo sourceMethod, Action<object> callback)
@@ -107,6 +122,13 @@ public static class UiEventLookup
     {
         var eventInstance = eventProperty.GetValue(instance);
         var addListener = eventProperty.PropertyType.GetMethod("AddListener");
+        addListener.Invoke(eventInstance, new object[] { unityAction });
+    }
+
+    private static void RegisterAction(UIBehaviour instance, FieldInfo eventField, object unityAction)
+    {
+        var eventInstance = eventField.GetValue(instance);
+        var addListener = eventField.FieldType.GetMethod("AddListener");
         addListener.Invoke(eventInstance, new object[] { unityAction });
     }
 }
