@@ -16,6 +16,7 @@ namespace UiBinding.Core
             [(typeof(InputField), "text")] = "onValueChanged",
             [(typeof(Toggle), "isOn")] = "onValueChanged",
             [(typeof(Scrollbar), "value")] = "onValueChanged",
+            [(typeof(Dropdown), "value")] = "onValueChanged",
         };
 
         public static void RegisterEvent<T>(string eventName, string propertyName)
