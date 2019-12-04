@@ -28,7 +28,7 @@ namespace UiBinding.Core
             // Listen for changes of the source
             if (_bindingMode != BindingMode.OneTime)
             {
-                Source.PropertyChanged += OnSourceChanged;
+                SetupSourceBinding();
             }
 
             // Listen for changes of the target
@@ -75,6 +75,19 @@ namespace UiBinding.Core
         private void InitializeValue()
         {
             OnSourceChanged(this, new PropertyChangedEventArgs(_sourceProperty.Name));
+        }
+
+        private void SetupSourceBinding()
+        {
+            INotifyPropertyChanged bindingSource = Source;
+
+            // Enables support for types like observable collection.
+            if (typeof(INotifyPropertyChanged).IsAssignableFrom(_sourceProperty.PropertyType))
+            {
+                bindingSource = (INotifyPropertyChanged)_sourceProperty.GetValue(Source);
+            }
+
+            bindingSource.PropertyChanged += OnSourceChanged;
         }
     }
 }
