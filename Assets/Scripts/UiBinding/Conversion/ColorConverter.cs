@@ -6,7 +6,11 @@ namespace UiBinding.Conversion
     {
         public override Color Convert(float value)
         {
-            return Color.Lerp(Color.red, Color.blue, value);
+            return Color.Lerp(MinColor, MaxColor, value);
         }
+
+        public Color MinColor { get; set; } = Color.red;
+
+        public Color MaxColor { get; set; } = Color.blue;
     }
 }

@@ -8,7 +8,7 @@ namespace UiBinding.Core
 {
     public class PropertyBinding : Binding<PropertyIndex, PropertyIndex>
     {
-        [SerializeField] private ConverterIndex _converterIndex;
+        [SerializeField] private ConverterIndex _converterIndex = new ConverterIndex();
         [SerializeField] private BindingMode _bindingMode;
 
         private PropertyInfo _sourceProperty;
@@ -20,10 +20,6 @@ namespace UiBinding.Core
             // Resolve an actual PropertyInfo from the serialized index
             _sourceProperty = SourceIndex.ResolveFrom(Source, PropertyBindingFlags.Source);
             _targetProperty = TargetIndex.ResolveFrom(Target, PropertyBindingFlags.Target);
-
-            // Resolve the selected converter. 
-            // If no converter has been specified, a default converter will be used instead.
-            _converter = _converterIndex.ResolveFor(this);
 
             // Listen for changes of the source
             if (_bindingMode != BindingMode.OneTime)
@@ -37,15 +33,15 @@ namespace UiBinding.Core
                 UiEventLookup.RegisterIfEventExistsFor(Target, _targetProperty, OnTargetChanged);
             }
 
+            // Resolve the selected converter. 
+            // If no converter has been specified, a default converter will be used instead.
+            _converter = _converterIndex.ResolveFor(this);
+
             // Retrieve the initial value from the source.
             InitializeValue();
         }
 
-        public int ConverterIndex
-        {
-            get => _converterIndex;
-            set => _converterIndex = value;
-        }
+        public ConverterIndex ConverterIndex => _converterIndex;
 
         public BindingMode BindingMode
         {
