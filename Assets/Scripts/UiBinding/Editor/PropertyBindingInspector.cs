@@ -5,6 +5,7 @@ using System.Reflection;
 using UiBinding.Conversion;
 using UiBinding.Core;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -31,6 +32,7 @@ namespace UiBinding.Inspector
 
         public override void OnInspectorGUI()
         {
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.Space();
 
             _targetProperties.ChangeTargetTypeIfNecessary(_binding.TargetType);
@@ -132,6 +134,11 @@ namespace UiBinding.Inspector
                 converterIndex.SetPropertyValue(prop.Name, newValue);
             }
             EditorGUI.indentLevel--;
+
+            if(EditorGUI.EndChangeCheck())
+            {
+                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            }
         }
 
         private string[] AssembleConverterList()

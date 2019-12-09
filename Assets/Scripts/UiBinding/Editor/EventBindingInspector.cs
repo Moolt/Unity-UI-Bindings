@@ -2,6 +2,7 @@
 using System.Reflection;
 using UiBinding.Core;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -24,6 +25,7 @@ namespace UiBinding.Inspector
 
         public override void OnInspectorGUI()
         {
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.Space();
 
             _targetEvents.ChangeTargetTypeIfNecessary(_binding.TargetType);
@@ -42,6 +44,11 @@ namespace UiBinding.Inspector
 
             _binding.SourceIndex = EditorGUILayout.Popup("Callback", _binding.SourceIndex, Nicify(_sourceCallbacks.Names));
             _binding.TargetIndex = EditorGUILayout.Popup("Event", _binding.TargetIndex, Nicify(_targetEvents.Names));
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            }
         }
 
         private void ResetBinding()
