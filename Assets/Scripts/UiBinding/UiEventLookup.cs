@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using TMPro;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -19,12 +21,17 @@ namespace UiBinding.Core
             [(typeof(Dropdown), "value")] = "onValueChanged",
         };
 
-        public static void RegisterEvent<T>(string eventName, string propertyName)
+        static UiEventLookup()
         {
-            RegisterEvent(typeof(T), eventName, propertyName);
+            InitializeTextMeshPro();
         }
 
-        public static void RegisterEvent(Type uiElementType, string eventName, string propertyName)
+        public static void RegisterEvent<T>(string eventName, string propertyName)
+        {
+            AddEvent(typeof(T), eventName, propertyName);
+        }
+
+        public static void AddEvent(Type uiElementType, string eventName, string propertyName)
         {
             _lookup[(uiElementType, propertyName)] = eventName;
         }
@@ -133,6 +140,20 @@ namespace UiBinding.Core
             var eventInstance = eventField.GetValue(instance);
             var addListener = eventField.FieldType.GetMethod("AddListener");
             addListener.Invoke(eventInstance, new object[] { unityAction });
+        }
+
+        private static void InitializeTextMeshPro()
+        {
+            try
+            {
+                var textMeshProAssembly = Assembly.Load("Unity.TextMeshPro");
+                AddEvent(textMeshProAssembly.GetType("TMPro.TMP_InputField"), "onValueChanged", "text");
+                AddEvent(textMeshProAssembly.GetType("TMPro.TMP_Dropdown"), "onValueChanged", "value");
+            }
+            catch (FileNotFoundException)
+            {
+                // Not installed.
+            }
         }
     }
 }
