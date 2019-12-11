@@ -10,8 +10,8 @@ namespace UiBinding.Core
         private void Awake()
         {
             // Resolve an actual PropertyInfo from the serialized index
-            _sourceCallback = SourceIndex.ResolveFrom(Source, PropertyBindingFlags.Source);
-            _targetEvent = TargetIndex.ResolveFrom(Target, PropertyBindingFlags.Target);
+            _sourceCallback = SourceIndex.ResolveFrom(Source, MemberFilters.SourceCallbacks);
+            _targetEvent = TargetIndex.ResolveFrom(Target, MemberFilters.TargetEvents);
 
             UiEventLookup.RegisterForEvent(Target, _targetEvent, _sourceCallback, OnTargetChanged);
         }

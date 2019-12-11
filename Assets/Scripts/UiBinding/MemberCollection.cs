@@ -5,36 +5,33 @@ using System.Reflection;
 
 namespace UiBinding.Core
 {
-    public abstract class MemberCollection<TMember> : List<TMember>
-    where TMember : MemberInfo
+    public class MemberCollection<TMember> : List<TMember>
+        where TMember : MemberInfo
     {
-        private Type _type;
-        private BindingFlags _bindingFlags;
+        private Type _targetType;
+        private readonly MemberFilter<TMember> _filter;
 
-        protected MemberCollection(Type type)
+        public MemberCollection(Type type, MemberFilter<TMember> filter)
         {
-            MemberType = type;
+            _targetType = type;
+            _filter = filter;
             Refresh();
         }
 
-        public MemberCollection<TMember> WithBindingFlags(BindingFlags bindingFlags)
+        public static IEnumerable<TMember> FilteredMembersFor(Type type, MemberFilter<TMember> filter)
         {
-            BindingFlags = bindingFlags;
-            Refresh();
-            return this;
+            return new MemberCollection<TMember>(type, filter).Members;
         }
 
         public MemberCollection<TMember> Refresh()
         {
-            if (MemberType == null)
+            if (_targetType == null)
             {
                 return this;
             }
 
             Clear();
-
-            var members = GetMembers();
-            AddRange(members);
+            AddRange(Members);
             return this;
         }
 
@@ -54,7 +51,7 @@ namespace UiBinding.Core
 
         public bool Targets(Type type)
         {
-            return MemberType == type;
+            return _targetType == type;
         }
 
         public MemberCollection<TMember> ChangeTargetTypeIfNecessary(Type type)
@@ -69,25 +66,13 @@ namespace UiBinding.Core
 
         public MemberCollection<TMember> ChangeTargetType(Type type)
         {
-            MemberType = type;
+            _targetType = type;
             Refresh();
             return this;
         }
 
         public string[] Names => this.Select(p => p.Name).ToArray();
 
-        protected abstract IEnumerable<TMember> GetMembers();
-
-        protected Type MemberType
-        {
-            get => _type;
-            set => _type = value;
-        }
-
-        protected BindingFlags BindingFlags
-        {
-            get => _bindingFlags;
-            set => _bindingFlags = value;
-        }
+        protected IEnumerable<TMember> Members => _filter.FilteredMembersFor(_targetType).ToList();
     }
 }

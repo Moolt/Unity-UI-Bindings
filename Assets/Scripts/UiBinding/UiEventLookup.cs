@@ -12,6 +12,8 @@ namespace UiBinding.Core
 {
     public static class UiEventLookup
     {
+        private static readonly BindingFlags EventFlags = BindingFlags.Public | BindingFlags.Instance;
+
         private static Dictionary<UiEventLookupKey, string> _lookup = new Dictionary<UiEventLookupKey, string>()
         {
             [(typeof(Slider), "value")] = "onValueChanged",
@@ -46,12 +48,12 @@ namespace UiBinding.Core
             // Unity is inconsistent about how they define Events.
             // They may be properties, as they should be, or public fields, as they absolutely shouldn't be.
             PropertyInfo uiEventProperty = targetProperty.DeclaringType
-                .GetProperties(PropertyBindingFlags.Target)
+                .GetProperties(EventFlags)
                 .Where(p => p.Name == eventName)
                 .FirstOrDefault();
 
             FieldInfo uiEventField = targetProperty.DeclaringType
-                .GetFields(PropertyBindingFlags.Target)
+                .GetFields(EventFlags)
                 .Where(p => p.Name == eventName)
                 .FirstOrDefault();
 

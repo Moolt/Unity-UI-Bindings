@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -9,11 +10,13 @@ namespace UiBinding.Core
     {
         [SerializeField] private int _index;
 
-        public MethodInfo ResolveFrom(object target, BindingFlags bindingFlags)
+        public MethodInfo ResolveFrom(object target, MethodFilter filter)
         {
             var targetType = target.GetType();
-            var properties = targetType.GetMethods(bindingFlags);
-            return properties[_index];
+            var methods = MemberCollection<MethodInfo>
+                .FilteredMembersFor(targetType, filter)
+                .ToArray();
+            return methods[_index];
         }
 
         public static implicit operator int(MethodIndex index) => index.Index;

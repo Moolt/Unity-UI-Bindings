@@ -18,8 +18,8 @@ namespace UiBinding.Core
         private void Awake()
         {
             // Resolve an actual PropertyInfo from the serialized index
-            _sourceProperty = SourceIndex.ResolveFrom(Source, PropertyBindingFlags.Source);
-            _targetProperty = TargetIndex.ResolveFrom(Target, PropertyBindingFlags.Target);
+            _sourceProperty = SourceIndex.ResolveFrom(Source, MemberFilters.SourceProperties);
+            _targetProperty = TargetIndex.ResolveFrom(Target, MemberFilters.TargetProperties);
 
             // Listen for changes of the source
             if (_bindingMode != BindingMode.OneTime)

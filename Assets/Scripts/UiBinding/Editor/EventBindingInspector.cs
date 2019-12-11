@@ -19,8 +19,8 @@ namespace UiBinding.Inspector
         {
             _binding = target as EventBinding;
 
-            _sourceCallbacks = MethodCollection.For(_binding.SourceType).WithBindingFlags(PropertyBindingFlags.Source);
-            _targetEvents = PropertyCollection.For(_binding.TargetType).WithBindingFlags(PropertyBindingFlags.Target);
+            _sourceCallbacks = new MemberCollection<MethodInfo>(_binding.SourceType, MemberFilters.SourceCallbacks);
+            _targetEvents = new MemberCollection<PropertyInfo>(_binding.TargetType, MemberFilters.TargetEvents);
         }
 
         public override void OnInspectorGUI()

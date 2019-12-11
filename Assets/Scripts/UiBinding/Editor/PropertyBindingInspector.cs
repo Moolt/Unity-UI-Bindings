@@ -24,8 +24,8 @@ namespace UiBinding.Inspector
         {
             _binding = target as PropertyBinding;
 
-            _sourceProperties = PropertyCollection.For(_binding.SourceType).WithBindingFlags(PropertyBindingFlags.Source);
-            _targetProperties = PropertyCollection.For(_binding.TargetType).WithBindingFlags(PropertyBindingFlags.Target);
+            _sourceProperties = new MemberCollection<PropertyInfo>(_binding.SourceType, MemberFilters.SourceProperties);
+            _targetProperties = new MemberCollection<PropertyInfo>(_binding.TargetType, MemberFilters.TargetProperties);
 
             _converters = AssembleConverterList();
         }
@@ -135,7 +135,7 @@ namespace UiBinding.Inspector
             }
             EditorGUI.indentLevel--;
 
-            if(EditorGUI.EndChangeCheck())
+            if (EditorGUI.EndChangeCheck())
             {
                 EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -9,10 +10,12 @@ namespace UiBinding.Core
     {
         [SerializeField] private int _index;
 
-        public PropertyInfo ResolveFrom(object target, BindingFlags bindingFlags)
+        public PropertyInfo ResolveFrom(object target, PropertyFilter filter)
         {
             var targetType = target.GetType();
-            var properties = targetType.GetProperties(bindingFlags);
+            var properties = MemberCollection<PropertyInfo>
+                .FilteredMembersFor(targetType, filter)
+                .ToArray();
             return properties[_index];
         }
 

@@ -2368,7 +2368,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 6.74e-43, y: 5.866361e-10, z: 6.74e-43, w: 4.789862e-10}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 6.7e-44, w: 0.10546875}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -3041,7 +3041,7 @@ MonoBehaviour:
       - _value: '{"r":1.0,"g":0.9188480973243713,"b":0.0,"a":1.0}'
         _type: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
-      - _value: '{"r":0.0,"g":1.0,"b":0.9407033920288086,"a":1.0}'
+      - _value: '{"r":1.0,"g":0.1585702747106552,"b":0.0,"a":1.0}'
         _type: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
       - _value: '{}'
@@ -6748,7 +6748,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 7
+    _index: 0
   _targetIndex:
     _index: 0
   _source: {fileID: 1464148134}
