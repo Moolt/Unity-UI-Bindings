@@ -7,7 +7,6 @@ using UiBinding.Core;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace UiBinding.Inspector
 {
@@ -39,7 +38,7 @@ namespace UiBinding.Inspector
             _sourceProperties.ChangeTargetTypeIfNecessary(_binding.SourceType);
 
             _binding.Source = (BindableMonoBehaviour)EditorGUILayout.ObjectField("Source", _binding.Source, typeof(BindableMonoBehaviour), true);
-            _binding.Target = (UIBehaviour)EditorGUILayout.ObjectField("Target", _binding.Target, typeof(UIBehaviour), true);
+            _binding.Target = EditorGUILayout.ObjectField("Target", _binding.Target, typeof(UnityEngine.Object), true);
 
             if (!_binding.HasSourceAndTarget)
             {

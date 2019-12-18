@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityObject = UnityEngine.Object;
 
 namespace UiBinding.Core
 {
@@ -10,7 +10,7 @@ namespace UiBinding.Core
         [SerializeField] private TTargetIndex _targetIndex;
 
         [SerializeField] private BindableMonoBehaviour _source;
-        [SerializeField] private UIBehaviour _target;
+        [SerializeField] private UnityObject _target;
 
         public BindableMonoBehaviour Source
         {
@@ -18,7 +18,7 @@ namespace UiBinding.Core
             set => _source = value;
         }
 
-        public UIBehaviour Target
+        public UnityObject Target
         {
             get => _target;
             set => _target = value;

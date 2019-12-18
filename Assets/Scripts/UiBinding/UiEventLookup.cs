@@ -5,8 +5,8 @@ using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityObject = UnityEngine.Object;
 
 namespace UiBinding.Core
 {
@@ -38,7 +38,7 @@ namespace UiBinding.Core
             _lookup[(uiElementType, propertyName)] = eventName;
         }
 
-        public static void RegisterIfEventExistsFor(UIBehaviour instance, PropertyInfo targetProperty, Action<object> callback)
+        public static void RegisterIfEventExistsFor(UnityObject instance, PropertyInfo targetProperty, Action<object> callback)
         {
             if (!_lookup.TryGetValue((targetProperty.DeclaringType, targetProperty.Name), out var eventName))
             {
@@ -73,7 +73,7 @@ namespace UiBinding.Core
             RegisterAction(instance, uiEventField, unityAction);
         }
 
-        public static void RegisterForEvent(UIBehaviour instance, PropertyInfo targetProperty, MethodInfo sourceMethod, Action<object> callback)
+        public static void RegisterForEvent(UnityObject instance, PropertyInfo targetProperty, MethodInfo sourceMethod, Action<object> callback)
         {
             object unityAction;
             var parameters = sourceMethod.GetParameters();
@@ -130,14 +130,14 @@ namespace UiBinding.Core
             return UnityActionFromCallback(callback);
         }
 
-        private static void RegisterAction(UIBehaviour instance, PropertyInfo eventProperty, object unityAction)
+        private static void RegisterAction(UnityObject instance, PropertyInfo eventProperty, object unityAction)
         {
             var eventInstance = eventProperty.GetValue(instance);
             var addListener = eventProperty.PropertyType.GetMethod("AddListener");
             addListener.Invoke(eventInstance, new object[] { unityAction });
         }
 
-        private static void RegisterAction(UIBehaviour instance, FieldInfo eventField, object unityAction)
+        private static void RegisterAction(UnityObject instance, FieldInfo eventField, object unityAction)
         {
             var eventInstance = eventField.GetValue(instance);
             var addListener = eventField.FieldType.GetMethod("AddListener");

@@ -32,7 +32,7 @@ namespace UiBinding.Inspector
             _sourceCallbacks.ChangeTargetTypeIfNecessary(_binding.SourceType);
 
             _binding.Source = (BindableMonoBehaviour)EditorGUILayout.ObjectField("Source", _binding.Source, typeof(BindableMonoBehaviour), true);
-            _binding.Target = (UIBehaviour)EditorGUILayout.ObjectField("Target", _binding.Target, typeof(UIBehaviour), true);
+            _binding.Target = EditorGUILayout.ObjectField("Target", _binding.Target, typeof(UnityEngine.Object), true);
 
             if (!_binding.HasSourceAndTarget)
             {
