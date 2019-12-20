@@ -16,7 +16,6 @@ namespace UiBinding.Inspector
         [SerializeField] private PropertyBinding _binding;
         [SerializeField] private MemberCollection<PropertyInfo> _sourceProperties;
         [SerializeField] private MemberCollection<PropertyInfo> _targetProperties;
-        [SerializeField] private string[] _converters;
         [SerializeField] private string[] _bindingModes = Enum.GetNames(typeof(BindingMode)).ToArray();
 
         private void OnEnable()
@@ -25,8 +24,6 @@ namespace UiBinding.Inspector
 
             _sourceProperties = new MemberCollection<PropertyInfo>(_binding.SourceType, MemberFilters.SourceProperties);
             _targetProperties = new MemberCollection<PropertyInfo>(_binding.TargetType, MemberFilters.TargetProperties);
-
-            _converters = AssembleConverterList();
         }
 
         public override void OnInspectorGUI()
@@ -48,8 +45,11 @@ namespace UiBinding.Inspector
 
             GuiLine();
 
-            _binding.SourceIndex = EditorGUILayout.Popup("Source Property", _binding.SourceIndex, Nicify(_sourceProperties.Names));
-            _binding.TargetIndex = EditorGUILayout.Popup("Target Property", _binding.TargetIndex, Nicify(_targetProperties.Names));
+            var sourceIndex = IndexedIdentifier.For(_binding.SourceIdentifier, _sourceProperties.Names);
+            var targetIndex = IndexedIdentifier.For(_binding.TargetIdentifier, _targetProperties.Names);
+
+            sourceIndex.Index = EditorGUILayout.Popup("Source Property", sourceIndex.Index, Nicify(_sourceProperties.Names));
+            targetIndex.Index = EditorGUILayout.Popup("Target Property", targetIndex.Index, Nicify(_targetProperties.Names));
             _binding.BindingMode = (BindingMode)EditorGUILayout.Popup("Mode", (int)_binding.BindingMode, _bindingModes);
 
             if (!TwoWayAvailable && _binding.BindingMode == BindingMode.TwoWay)
@@ -60,14 +60,16 @@ namespace UiBinding.Inspector
             GuiLine();
 
             // Handle converters
-            var converterIndex = _binding.ConverterIndex;
-            converterIndex.Index = EditorGUILayout.Popup("Conversion", converterIndex.Index + 1, _converters) - 1;
+            var _converterNames = ConversionProvider.AvailableConverterNames.Select(n => n.Replace("Coverter", string.Empty)).ToArray();
+            var converterIdentifier = _binding.ConverterIdentifier;
+            var converterIndex = IndexedIdentifier.For(converterIdentifier, ConversionProvider.AvailableConverterNames.ToList());
+            converterIndex.Index = EditorGUILayout.Popup("Conversion", converterIndex.Index, _converterNames);
 
-            var converterProperties = ConversionProvider.PropertiesFor(converterIndex);
+            var converterProperties = ConversionProvider.PropertiesFor(converterIdentifier);
             EditorGUI.indentLevel++;
             foreach (var prop in converterProperties)
             {
-                object propertyValue = converterIndex.GetPropertyValue(prop.Name);
+                object propertyValue = converterIdentifier.GetPropertyValue(prop.Name);
                 object newValue = null;
 
                 if (prop.PropertyType == typeof(int))
@@ -130,7 +132,7 @@ namespace UiBinding.Inspector
                     newValue = EditorGUILayout.EnumPopup(prop.Name, (Enum)propertyValue);
                 }
 
-                converterIndex.SetPropertyValue(prop.Name, newValue);
+                converterIdentifier.SetPropertyValue(prop.Name, newValue);
             }
             EditorGUI.indentLevel--;
 
@@ -138,13 +140,6 @@ namespace UiBinding.Inspector
             {
                 EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             }
-        }
-
-        private string[] AssembleConverterList()
-        {
-            var converters = new List<string>() { "Default" };
-            converters.AddRange(ConversionProvider.AvailableConverterNames);
-            return converters.ToArray();
         }
 
         /// <summary>
@@ -163,15 +158,15 @@ namespace UiBinding.Inspector
         private void ResetBinding()
         {
             _binding.BindingMode = default;
-            _binding.SourceIndex = 0;
-            _binding.TargetIndex = 0;
-            _binding.ConverterIndex.Index = ConverterIndex.Default;
+            _binding.SourceIdentifier.Name = string.Empty;
+            _binding.TargetIdentifier.Name = string.Empty;
+            _binding.ConverterIdentifier.Name = ConverterIdentifier.Default;
         }
 
         private bool TwoWayAvailable =>
             _binding != null &&
             _binding.HasSourceAndTarget &&
-            UiEventLookup.HasEventFor(_binding.TargetType, _targetProperties.Names[_binding.TargetIndex]);
+            UiEventLookup.HasEventFor(_binding.TargetType, _binding.TargetIdentifier.Name);
 
         private string[] Nicify(string[] input)
         {

@@ -7,10 +7,9 @@ using UnityEngine;
 namespace UiBinding.Conversion
 {
     [Serializable]
-    public class ConverterIndex
+    public class ConverterIdentifier : Identifier
     {
         [SerializeField] private SerializableDictionary _properties = new SerializableDictionary();
-        [SerializeField] private int _index = -1;
 
         public IValueConverter ResolveFor(PropertyBinding binding)
         {
@@ -22,19 +21,13 @@ namespace UiBinding.Conversion
             return Instantiate();
         }
 
-        public static implicit operator int(ConverterIndex index) => index.Index;
+        public static implicit operator string(ConverterIdentifier identifier) => identifier.Name;
 
-        public static implicit operator ConverterIndex(int index) => new ConverterIndex() { Index = index };
+        public static implicit operator ConverterIdentifier(string name) => new ConverterIdentifier() { Name = name };
 
-        public int Index
-        {
-            get => _index;
-            set => _index = value;
-        }
+        public bool IsDefault => Name == Default;
 
-        public bool IsDefault => _index < 0;
-
-        public static int Default => -1;
+        public static string Default => typeof(DefaultConverter).Name;
 
         public void ClearProperties()
         {
@@ -106,7 +99,7 @@ namespace UiBinding.Conversion
 
         private object DefaultForProperty(string property)
         {
-            var converterType = ConversionProvider.TypeOfConverterAt(this);
+            var converterType = ConversionProvider.TypeOfConverterFor(this);
             var propertyInfo = converterType.GetProperty(property);
             var converterInstance = Instantiate();
             var defaultValue = propertyInfo.GetValue(converterInstance);
@@ -120,6 +113,6 @@ namespace UiBinding.Conversion
             return defaultValue;
         }
 
-        private Type ConverterType => ConversionProvider.TypeOfConverterAt(this);
+        private Type ConverterType => ConversionProvider.TypeOfConverterFor(this);
     }
 }

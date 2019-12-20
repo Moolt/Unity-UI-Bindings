@@ -2,18 +2,29 @@
 
 namespace UiBinding.Core
 {
-    public class EventBinding : Binding<MethodIndex, PropertyIndex>
+    public class EventBinding : Binding<MethodIdentifier, PropertyIdentifier>
     {
         private MethodInfo _sourceCallback;
         private PropertyInfo _targetEvent;
 
-        private void Awake()
+        protected override void Awake()
         {
-            // Resolve an actual PropertyInfo from the serialized index
-            _sourceCallback = SourceIndex.ResolveFrom(Source, MemberFilters.SourceCallbacks);
-            _targetEvent = TargetIndex.ResolveFrom(Target, MemberFilters.TargetEvents);
+            base.Awake();
 
-            UiEventLookup.RegisterForEvent(Target, _targetEvent, _sourceCallback, OnTargetChanged);
+            SourceIdentifier.AssertValid($"{gameObject.name}: No source callback found.");
+            TargetIdentifier.AssertValid($"{gameObject.name}: No target event found.");
+
+            // Resolve an actual PropertyInfo from the serialized index
+            _sourceCallback = SourceIdentifier.ResolveFrom(Source);
+            _targetEvent = TargetIdentifier.ResolveFrom(Target);
+
+            var destructor = UiEventLookup.RegisterForEvent(Target, _targetEvent, _sourceCallback, OnTargetChanged);
+            AddDestructor(destructor);
+        }
+
+        private void OnDestroy()
+        {
+            Break();
         }
 
         private void OnTargetChanged(object value)

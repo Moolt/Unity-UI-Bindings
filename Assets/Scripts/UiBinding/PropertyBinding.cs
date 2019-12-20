@@ -6,20 +6,22 @@ using UnityEngine;
 
 namespace UiBinding.Core
 {
-    public class PropertyBinding : Binding<PropertyIndex, PropertyIndex>
+    public class PropertyBinding : Binding<PropertyIdentifier, PropertyIdentifier>
     {
-        [SerializeField] private ConverterIndex _converterIndex = new ConverterIndex();
+        [SerializeField] private ConverterIdentifier _converterIndex = new ConverterIdentifier();
         [SerializeField] private BindingMode _bindingMode;
 
         private PropertyInfo _sourceProperty;
         private PropertyInfo _targetProperty;
         private IValueConverter _converter;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             // Resolve an actual PropertyInfo from the serialized index
-            _sourceProperty = SourceIndex.ResolveFrom(Source, MemberFilters.SourceProperties);
-            _targetProperty = TargetIndex.ResolveFrom(Target, MemberFilters.TargetProperties);
+            _sourceProperty = SourceIdentifier.ResolveFrom(Source);
+            _targetProperty = TargetIdentifier.ResolveFrom(Target);
 
             // Listen for changes of the source
             if (_bindingMode != BindingMode.OneTime)
@@ -30,7 +32,8 @@ namespace UiBinding.Core
             // Listen for changes of the target
             if (_bindingMode == BindingMode.TwoWay)
             {
-                UiEventLookup.RegisterIfEventExistsFor(Target, _targetProperty, OnTargetChanged);
+                var destructor = UiEventLookup.RegisterIfEventExistsFor(Target, _targetProperty, OnTargetChanged);
+                AddDestructor(destructor);
             }
 
             // Resolve the selected converter. 
@@ -41,7 +44,12 @@ namespace UiBinding.Core
             InitializeValue();
         }
 
-        public ConverterIndex ConverterIndex => _converterIndex;
+        private void OnDestroy()
+        {
+            Break();
+        }
+
+        public ConverterIdentifier ConverterIdentifier => _converterIndex;
 
         public BindingMode BindingMode
         {
@@ -70,7 +78,16 @@ namespace UiBinding.Core
 
         private void InitializeValue()
         {
-            OnSourceChanged(this, new PropertyChangedEventArgs(_sourceProperty.Name));
+            try
+            {
+                OnSourceChanged(this, new PropertyChangedEventArgs(_sourceProperty.Name));
+            }
+            catch (Exception e)
+            {
+                Break();
+                Debug.LogError($"A binding broke because of an error. Please fix all errors, as other bindings might also be affected.\n{ToString()}");
+                Debug.LogException(e);
+            }
         }
 
         private void SetupSourceBinding()
@@ -84,6 +101,15 @@ namespace UiBinding.Core
             }
 
             bindingSource.PropertyChanged += OnSourceChanged;
+
+            // Unregister the subscription if the binding breaks.
+            var destructor = new DisposableAction(() => bindingSource.PropertyChanged -= OnSourceChanged);
+            AddDestructor(destructor);
+        }
+
+        public override string ToString()
+        {
+            return $"{gameObject.name}: {SourceType.Name}::{_sourceProperty.Name} -> {TargetType.Name}::{_targetProperty.Name}";
         }
     }
 }

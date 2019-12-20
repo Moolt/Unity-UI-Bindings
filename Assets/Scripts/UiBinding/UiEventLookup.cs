@@ -38,11 +38,11 @@ namespace UiBinding.Core
             _lookup[(uiElementType, propertyName)] = eventName;
         }
 
-        public static void RegisterIfEventExistsFor(UnityObject instance, PropertyInfo targetProperty, Action<object> callback)
+        public static IDisposable RegisterIfEventExistsFor(UnityObject instance, PropertyInfo targetProperty, Action<object> callback)
         {
             if (!_lookup.TryGetValue((targetProperty.DeclaringType, targetProperty.Name), out var eventName))
             {
-                return;
+                return DisposableAction.Empty;
             }
 
             // Unity is inconsistent about how they define Events.
@@ -59,28 +59,27 @@ namespace UiBinding.Core
 
             if (uiEventProperty == null && uiEventField == null)
             {
-                return;
+                return DisposableAction.Empty;
             }
 
             var unityAction = UnityActionFor(targetProperty.PropertyType, callback);
 
             if (uiEventProperty != null)
             {
-                RegisterAction(instance, uiEventProperty, unityAction);
-                return;
+                return RegisterAction(instance, uiEventProperty, unityAction);
             }
 
-            RegisterAction(instance, uiEventField, unityAction);
+            return RegisterAction(instance, uiEventField, unityAction);
         }
 
-        public static void RegisterForEvent(UnityObject instance, PropertyInfo targetProperty, MethodInfo sourceMethod, Action<object> callback)
+        public static IDisposable RegisterForEvent(UnityObject instance, PropertyInfo targetProperty, MethodInfo sourceMethod, Action<object> callback)
         {
             object unityAction;
             var parameters = sourceMethod.GetParameters();
 
             if (parameters.Length > 1)
             {
-                return;
+                return DisposableAction.Empty;
             }
 
             if (parameters.Length == 1)
@@ -89,7 +88,7 @@ namespace UiBinding.Core
 
                 if (parameter == null)
                 {
-                    return;
+                    return DisposableAction.Empty;
                 }
 
                 var parameterType = parameter.ParameterType;
@@ -100,7 +99,7 @@ namespace UiBinding.Core
                 unityAction = UnityActionFor(callback);
             }
 
-            RegisterAction(instance, targetProperty, unityAction);
+            return RegisterAction(instance, targetProperty, unityAction);
         }
 
         public static bool HasEventFor(Type uiType, string propertyName)
@@ -130,18 +129,30 @@ namespace UiBinding.Core
             return UnityActionFromCallback(callback);
         }
 
-        private static void RegisterAction(UnityObject instance, PropertyInfo eventProperty, object unityAction)
+        private static IDisposable RegisterAction(UnityObject instance, PropertyInfo eventProperty, object unityAction)
         {
             var eventInstance = eventProperty.GetValue(instance);
             var addListener = eventProperty.PropertyType.GetMethod("AddListener");
             addListener.Invoke(eventInstance, new object[] { unityAction });
+
+            return new DisposableAction(() =>
+            {
+                var removeListener = eventProperty.PropertyType.GetMethod("RemoveAllListeners");
+                removeListener.Invoke(eventInstance, new object[] { });
+            });
         }
 
-        private static void RegisterAction(UnityObject instance, FieldInfo eventField, object unityAction)
+        private static IDisposable RegisterAction(UnityObject instance, FieldInfo eventField, object unityAction)
         {
             var eventInstance = eventField.GetValue(instance);
             var addListener = eventField.FieldType.GetMethod("AddListener");
             addListener.Invoke(eventInstance, new object[] { unityAction });
+
+            return new DisposableAction(() =>
+            {
+                var removeListener = eventField.FieldType.GetMethod("RemoveAllListeners");
+                removeListener.Invoke(eventInstance, new object[] { });
+            });
         }
 
         private static void InitializeTextMeshPro()

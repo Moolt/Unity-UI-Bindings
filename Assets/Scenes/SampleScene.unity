@@ -171,17 +171,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: SliderValue
+    _valid: 1
   _targetIndex:
-    _index: 4
+    _name: text
+    _valid: 1
   _source: {fileID: 421032658}
   _target: {fileID: 28396635}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
-  _bindingMode: 0
+  _bindingMode: 1
 --- !u!114 &28396635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -766,16 +769,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: Checked
+    _valid: 1
   _targetIndex:
-    _index: 1
+    _name: isOn
+    _valid: 1
   _source: {fileID: 644439712}
   _target: {fileID: 289534756}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 0
 --- !u!114 &289534756
 MonoBehaviour:
@@ -1181,16 +1187,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: SliderValue
+    _valid: 1
   _targetIndex:
-    _index: 6
+    _name: value
+    _valid: 1
   _source: {fileID: 421032658}
   _target: {fileID: 410661855}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 0
 --- !u!114 &410661855
 MonoBehaviour:
@@ -2288,16 +2297,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: SliderValue
+    _valid: 1
   _targetIndex:
-    _index: 6
+    _name: value
+    _valid: 1
   _source: {fileID: 1566149773}
   _target: {fileID: 680706282}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 0
 --- !u!1 &705018322
 GameObject:
@@ -2445,7 +2457,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 6.7e-44, w: 0.10546875}
+  m_BoundingSphereOverride: {x: 0, y: 2.3509887e-38, z: -1.0842683e-19, w: -4.951762e+27}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -2606,16 +2618,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 1
+    _name: Text
+    _valid: 1
   _targetIndex:
-    _index: 2
+    _name: text
+    _valid: 1
   _source: {fileID: 919680264}
   _target: {fileID: 712831761}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 0
 --- !u!114 &712831761
 MonoBehaviour:
@@ -2762,16 +2777,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: Checked
+    _valid: 1
   _targetIndex:
-    _index: 61
+    _name: interactable
+    _valid: 1
   _source: {fileID: 919680264}
   _target: {fileID: 712831761}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 1
 --- !u!1 &718306140
 GameObject:
@@ -2979,16 +2997,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: Options
+    _valid: 1
   _targetIndex:
-    _index: 5
+    _name: options
+    _valid: 1
   _source: {fileID: 1464148134}
   _target: {fileID: 781976738}
   _converterIndex:
+    _name: StringsToDropdownOptionsConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: 2
   _bindingMode: 1
 --- !u!114 &781976738
 MonoBehaviour:
@@ -3091,16 +3112,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 1
+    _name: SelectedIndex
+    _valid: 1
   _targetIndex:
-    _index: 8
+    _name: value
+    _valid: 1
   _source: {fileID: 1464148134}
   _target: {fileID: 781976738}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 0
 --- !u!1 &820214366
 GameObject:
@@ -3262,12 +3286,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: SliderValue
+    _valid: 1
   _targetIndex:
-    _index: 26
+    _name: color
+    _valid: 1
   _source: {fileID: 1218026039}
   _target: {fileID: 847721199}
   _converterIndex:
+    _name: ColorConverter
+    _valid: 1
     _properties:
       _keys:
       - _value: MinColor
@@ -3277,16 +3305,15 @@ MonoBehaviour:
       - _value: Foo
         _type: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
       _values:
-      - _value: '{"r":1.0,"g":0.6868737936019898,"b":0.0,"a":1.0}'
+      - _value: '{"r":1.0,"g":0.0,"b":0.628687858581543,"a":1.0}'
         _type: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
-      - _value: '{"r":0.0,"g":1.0,"b":0.9017179012298584,"a":1.0}'
+      - _value: '{"r":0.555223822593689,"g":1.0,"b":0.0,"a":1.0}'
         _type: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
       - _value: '{}'
         _type: UnityEngine.Gradient, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
-    _index: 0
   _bindingMode: 1
 --- !u!114 &847721199
 MonoBehaviour:
@@ -3706,16 +3733,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 3
+    _name: NewItemName
+    _valid: 1
   _targetIndex:
-    _index: 1
+    _name: text
+    _valid: 1
   _source: {fileID: 1464148134}
   _target: {fileID: 989028271}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 0
 --- !u!114 &989028271
 MonoBehaviour:
@@ -3867,16 +3897,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 1
+    _name: Sprite
+    _valid: 1
   _targetIndex:
-    _index: 0
+    _name: sprite
+    _valid: 1
   _source: {fileID: 644439712}
   _target: {fileID: 1022833263}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 1
 --- !u!114 &1022833263
 MonoBehaviour:
@@ -4130,16 +4163,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: SliderValue
+    _valid: 1
   _targetIndex:
-    _index: 6
+    _name: value
+    _valid: 1
   _source: {fileID: 1566149773}
   _target: {fileID: 1084508357}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 0
 --- !u!1 &1169295493
 GameObject:
@@ -4858,16 +4894,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: SliderValue
+    _valid: 1
   _targetIndex:
-    _index: 6
+    _name: value
+    _valid: 1
   _source: {fileID: 1218026039}
   _target: {fileID: 1382325595}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 0
 --- !u!114 &1382325595
 MonoBehaviour:
@@ -5048,16 +5087,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: Checked
+    _valid: 1
   _targetIndex:
-    _index: 1
+    _name: isOn
+    _valid: 1
   _source: {fileID: 919680264}
   _target: {fileID: 1408160731}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 0
 --- !u!114 &1408160731
 MonoBehaviour:
@@ -5322,16 +5364,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: TimerValue
+    _valid: 1
   _targetIndex:
-    _index: 4
+    _name: text
+    _valid: 1
   _source: {fileID: 574618778}
   _target: {fileID: 1457952918}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 1
 --- !u!114 &1457952918
 MonoBehaviour:
@@ -6205,16 +6250,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 2
+    _name: SelectedItem
+    _valid: 1
   _targetIndex:
-    _index: 4
+    _name: text
+    _valid: 1
   _source: {fileID: 1464148134}
   _target: {fileID: 1598127108}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 1
 --- !u!114 &1598127108
 MonoBehaviour:
@@ -6307,16 +6355,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 1
+    _name: Text
+    _valid: 1
   _targetIndex:
-    _index: 5
+    _name: text
+    _valid: 1
   _source: {fileID: 919680264}
   _target: {fileID: 1620055934}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 1
 --- !u!114 &1620055934
 MonoBehaviour:
@@ -6487,16 +6538,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: SliderValue
+    _valid: 1
   _targetIndex:
-    _index: 16
+    _name: rotation
+    _valid: 1
   _source: {fileID: 706085932}
   _target: {fileID: 1631948280}
   _converterIndex:
+    _name: FloatToRotationConverter
+    _valid: 1
     _properties:
-      _keys: []
-      _values: []
-    _index: 1
+      _keys:
+      - _value: RotationAxis
+        _type: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      - _value: MinColor
+        _type: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      - _value: MaxColor
+        _type: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+      _values:
+      - _value: '{"x":0.0,"y":0.0,"z":-1.0}'
+        _type: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+      - _value: '{"r":1.0,"g":0.0,"b":0.0,"a":1.0}'
+        _type: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
+      - _value: '{"r":0.0,"g":0.0,"b":1.0,"a":1.0}'
+        _type: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
   _bindingMode: 1
 --- !u!114 &1631948282
 MonoBehaviour:
@@ -7122,9 +7191,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: OnUserAddedItem
+    _valid: 1
   _targetIndex:
-    _index: 0
+    _name: onClick
+    _valid: 1
   _source: {fileID: 1464148134}
   _target: {fileID: 1798379055}
 --- !u!114 &1798379055
@@ -8392,16 +8463,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sourceIndex:
-    _index: 0
+    _name: SliderValue
+    _valid: 1
   _targetIndex:
-    _index: 6
+    _name: value
+    _valid: 1
   _source: {fileID: 706085932}
   _target: {fileID: 2130648322}
   _converterIndex:
+    _name: DefaultConverter
+    _valid: 1
     _properties:
       _keys: []
       _values: []
-    _index: -1
   _bindingMode: 0
 --- !u!114 &2130648322
 MonoBehaviour:

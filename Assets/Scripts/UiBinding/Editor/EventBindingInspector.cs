@@ -42,8 +42,25 @@ namespace UiBinding.Inspector
 
             GuiLine();
 
-            _binding.SourceIndex = EditorGUILayout.Popup("Callback", _binding.SourceIndex, Nicify(_sourceCallbacks.Names));
-            _binding.TargetIndex = EditorGUILayout.Popup("Event", _binding.TargetIndex, Nicify(_targetEvents.Names));
+            if(_sourceCallbacks.Count == 0)
+            {
+                EditorGUILayout.HelpBox("No source callbacks found.", MessageType.Info);
+                _binding.SourceIdentifier.Valid = false;
+                return;
+            }
+
+            if (_targetEvents.Count == 0)
+            {
+                EditorGUILayout.HelpBox("No target events found.", MessageType.Info);
+                _binding.TargetIdentifier.Valid = false;
+                return;
+            }
+
+            var sourceIndex = IndexedIdentifier.For(_binding.SourceIdentifier, _sourceCallbacks.Names);
+            var targetIndex = IndexedIdentifier.For(_binding.TargetIdentifier, _targetEvents.Names);
+
+            sourceIndex.Index = EditorGUILayout.Popup("Callback", sourceIndex.Index, Nicify(_sourceCallbacks.Names));
+            targetIndex.Index = EditorGUILayout.Popup("Event", targetIndex.Index, Nicify(_targetEvents.Names));
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -53,8 +70,8 @@ namespace UiBinding.Inspector
 
         private void ResetBinding()
         {
-            _binding.SourceIndex = 0;
-            _binding.TargetIndex = 0;
+            _binding.SourceIdentifier.Name = string.Empty;
+            _binding.TargetIdentifier.Name = string.Empty;
         }
 
         /// <summary>

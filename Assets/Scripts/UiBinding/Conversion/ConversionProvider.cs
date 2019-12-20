@@ -12,28 +12,31 @@ namespace UiBinding.Conversion
         {
             get
             {
-                return Assembly
+                var converters = Assembly
                     .GetTypes()
-                    .Where(t => typeof(IValueConverter).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract && t.HasDefaultConstructor());
+                    .Where(t => typeof(IValueConverter).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract && t.HasDefaultConstructor())
+                    .ToList();
+                converters.Insert(0, typeof(DefaultConverter));
+                return converters;
             }
         }
 
-        public static IEnumerable<string> AvailableConverterNames => AvailableConverters.Select(c => c.Name.Replace("Converter", string.Empty));
+        public static IEnumerable<string> AvailableConverterNames => AvailableConverters.Select(c => c.Name);
 
-        public static IEnumerable<PropertyInfo> PropertiesFor(ConverterIndex converter)
+        public static IEnumerable<PropertyInfo> PropertiesFor(ConverterIdentifier identifier)
         {
-            if (converter.IsDefault)
+            if (identifier.IsDefault)
             {
                 return Array.Empty<PropertyInfo>();
             }
 
-            var converterType = AvailableConverters.ElementAt(converter);
+            var converterType = TypeOfConverterFor(identifier);
             return converterType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
         }
 
-        public static Type TypeOfConverterAt(ConverterIndex index)
+        public static Type TypeOfConverterFor(ConverterIdentifier identifier)
         {
-            return AvailableConverters.ElementAt(index);
+            return AvailableConverters.FirstOrDefault(c => c.Name == identifier);
         }
 
         private static Assembly Assembly => AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "Assembly-CSharp");
