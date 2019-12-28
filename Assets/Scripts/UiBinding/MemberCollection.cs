@@ -73,6 +73,6 @@ namespace UiBinding.Core
 
         public string[] Names => this.Select(p => p.Name).ToArray();
 
-        protected IEnumerable<TMember> Members => _filter.FilteredMembersFor(_targetType).ToList();
+        protected IEnumerable<TMember> Members => _filter.FilteredMembersFor(_targetType);
     }
 }

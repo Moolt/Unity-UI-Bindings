@@ -602,6 +602,7 @@ MonoBehaviour:
     _name: Items
     _valid: 1
   _prefabs:
+  - {fileID: 5021094222353287658, guid: 05ca2329c9a3c084e98f0fd865f095a3, type: 3}
   - {fileID: 3788193048972370825, guid: 297ea888b5157c346a5ca67bebdda949, type: 3}
 --- !u!114 &122545047
 MonoBehaviour:
@@ -616,12 +617,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Left: 5
+    m_Right: 5
+    m_Top: 5
+    m_Bottom: 5
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 5
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -635,7 +636,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 122545044}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 

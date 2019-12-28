@@ -16,7 +16,8 @@ namespace UiBinding.Core
         {
             return type
                 .GetProperties(BindingFlags)
-                .Where(Selector);
+                .Where(Selector)
+                .ToList();
         }
     }
 }

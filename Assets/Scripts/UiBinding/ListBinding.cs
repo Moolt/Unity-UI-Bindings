@@ -82,10 +82,19 @@ namespace UiBinding.Core
 
             foreach (INotifyPropertyChanged item in list)
             {
+                if (!_mapping.ContainsKey(item.GetType()))
+                {
+                    throw new Exception($"No prefab found for type {item.GetType().Name}.");
+                }
+
                 var prefab = _mapping[item.GetType()];
                 var instance = Instantiate(prefab, transform);
-                var binding = instance.GetComponentInChildren<IBinding>();
-                binding.Bind(item);
+                var bindings = instance.GetComponentsInChildren<IBinding>();
+
+                foreach (var binding in bindings)
+                {
+                    binding.Bind(item);
+                }
             }
         }
     }

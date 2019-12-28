@@ -31,7 +31,7 @@ namespace UiBinding.Inspector
 
             _binding.Source = (BindableMonoBehaviour)EditorGUILayout.ObjectField("Source", _binding.Source, typeof(BindableMonoBehaviour), true);
 
-            if(_binding.Source == null)
+            if (_binding.Source == null)
             {
                 return;
             }
@@ -40,14 +40,57 @@ namespace UiBinding.Inspector
             listIndex.Index = EditorGUILayout.Popup("List", listIndex.Index, Nicify(_listProperties.Names));
 
             EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Mapping", EditorStyles.boldLabel);
 
-            EditorGUILayout.PropertyField(_listProperty, true);
+            if (_listProperty.arraySize == 0)
+            {
+                EditorGUILayout.HelpBox("Add prefabs which bind to the types in your list.\n", MessageType.Info);
+            }
+
+            for (int i = 0; i < _listProperty.arraySize; i++)
+            {
+                var item = _listProperty.GetArrayElementAtIndex(i);
+                var name = TypeNameFromSerializeProperty(item);
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(name, GUILayout.Width(125));
+                EditorGUILayout.PropertyField(item, GUIContent.none);
+
+                if (GUILayout.Button("×", GUILayout.Width(20)))
+                {
+                    item.objectReferenceValue = null;
+                    _listProperty.DeleteArrayElementAtIndex(i);
+                    break;
+                }
+
+                EditorGUILayout.EndHorizontal();
+            }
+
+            EditorGUILayout.Space();
+
+            if (GUILayout.Button("Add prefab"))
+            {
+                _listProperty.InsertArrayElementAtIndex(_listProperty.arraySize);
+            }
+
             serializedObject.ApplyModifiedProperties();
         }
 
         private string[] Nicify(string[] input)
         {
             return input.Select(s => ObjectNames.NicifyVariableName(s)).ToArray();
+        }
+
+        private string TypeNameFromSerializeProperty(SerializedProperty property)
+        {
+            string name = "No binding found";
+            try
+            {
+                name = (property.objectReferenceValue as GameObject).GetComponentInChildren<IBinding>().SourceType.Name;
+            }
+            catch { }
+
+            return name;
         }
     }
 }

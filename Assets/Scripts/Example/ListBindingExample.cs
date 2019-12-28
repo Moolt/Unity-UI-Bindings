@@ -27,7 +27,7 @@ public class ListBindingExample : BindableMonoBehaviour
         _items.Add(new LabeledItem("Bread"));
         _items.Add(new LabeledItem("Pie"));
         _items.Add(new LabeledItem("Flower"));
-        _items.Add(new LabeledItem("Vase"));
+        _items.Add(new DetailedLabeledItem("Vase", "A beautiful vase"));
         _items.Add(new LabeledItem("House"));
         RaisePropertyChanged(() => Items);
     }
