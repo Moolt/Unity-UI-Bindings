@@ -4,7 +4,7 @@ using UiBinding.Core;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityObject = UnityEngine.Object;
 
 namespace UiBinding.Inspector
 {
@@ -31,8 +31,8 @@ namespace UiBinding.Inspector
             _targetEvents.ChangeTargetTypeIfNecessary(_binding.TargetType);
             _sourceCallbacks.ChangeTargetTypeIfNecessary(_binding.SourceType);
 
-            _binding.Source = (BindableMonoBehaviour)EditorGUILayout.ObjectField("Source", _binding.Source, typeof(BindableMonoBehaviour), true);
-            _binding.Target = EditorGUILayout.ObjectField("Target", _binding.Target, typeof(UnityEngine.Object), true);
+            _binding.SourceDefinition.Instance = (BindableMonoBehaviour)EditorGUILayout.ObjectField("Source", _binding.SourceDefinition.Instance, typeof(BindableMonoBehaviour), true);
+            _binding.Target = EditorGUILayout.ObjectField("Target", _binding.Target, typeof(UnityObject), true);
 
             if (!_binding.HasSourceAndTarget)
             {
@@ -42,7 +42,7 @@ namespace UiBinding.Inspector
 
             GuiLine();
 
-            if(_sourceCallbacks.Count == 0)
+            if (_sourceCallbacks.Count == 0)
             {
                 EditorGUILayout.HelpBox("No source callbacks found.", MessageType.Info);
                 _binding.SourceIdentifier.Valid = false;

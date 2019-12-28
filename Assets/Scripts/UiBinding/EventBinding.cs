@@ -7,10 +7,8 @@ namespace UiBinding.Core
         private MethodInfo _sourceCallback;
         private PropertyInfo _targetEvent;
 
-        protected override void Awake()
+        protected override void OnEstablishBinding()
         {
-            base.Awake();
-
             SourceIdentifier.AssertValid($"{gameObject.name}: No source callback found.");
             TargetIdentifier.AssertValid($"{gameObject.name}: No target event found.");
 
@@ -20,11 +18,6 @@ namespace UiBinding.Core
 
             var destructor = UiEventLookup.RegisterForEvent(Target, _targetEvent, _sourceCallback, OnTargetChanged);
             AddDestructor(destructor);
-        }
-
-        private void OnDestroy()
-        {
-            Break();
         }
 
         private void OnTargetChanged(object value)

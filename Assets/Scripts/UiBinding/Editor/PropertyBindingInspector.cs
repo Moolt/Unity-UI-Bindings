@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using UiBinding.Conversion;
@@ -7,6 +7,7 @@ using UiBinding.Core;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace UiBinding.Inspector
 {
@@ -16,12 +17,13 @@ namespace UiBinding.Inspector
         [SerializeField] private PropertyBinding _binding;
         [SerializeField] private MemberCollection<PropertyInfo> _sourceProperties;
         [SerializeField] private MemberCollection<PropertyInfo> _targetProperties;
-        [SerializeField] private string[] _bindingModes = Enum.GetNames(typeof(BindingMode)).ToArray();
+        [SerializeField] private TypeCollection<INotifyPropertyChanged> _sourceTypeCollection;
 
         private void OnEnable()
         {
             _binding = target as PropertyBinding;
 
+            _sourceTypeCollection = new TypeCollection<INotifyPropertyChanged>();
             _sourceProperties = new MemberCollection<PropertyInfo>(_binding.SourceType, MemberFilters.SourceProperties);
             _targetProperties = new MemberCollection<PropertyInfo>(_binding.TargetType, MemberFilters.TargetProperties);
         }
@@ -31,11 +33,29 @@ namespace UiBinding.Inspector
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.Space();
 
-            _targetProperties.ChangeTargetTypeIfNecessary(_binding.TargetType);
-            _sourceProperties.ChangeTargetTypeIfNecessary(_binding.SourceType);
+            if (_targetProperties.ChangeTargetTypeIfNecessary(_binding.TargetType))
+            {
+                _binding.TargetIdentifier.Name = string.Empty;
+            }
+            if (_sourceProperties.ChangeTargetTypeIfNecessary(_binding.SourceType))
+            {
+                _binding.SourceIdentifier.Name = string.Empty;
+            }
 
-            _binding.Source = (BindableMonoBehaviour)EditorGUILayout.ObjectField("Source", _binding.Source, typeof(BindableMonoBehaviour), true);
-            _binding.Target = EditorGUILayout.ObjectField("Target", _binding.Target, typeof(UnityEngine.Object), true);
+            _binding.SourceDefinition.Kind = (BindingMemberKind)EditorGUILayout.EnumPopup("Reference", _binding.SourceDefinition.Kind);
+
+            if (_binding.SourceDefinition.Kind == BindingMemberKind.Instance)
+            {
+                _binding.SourceDefinition.Instance = (BindableMonoBehaviour)EditorGUILayout.ObjectField("Source", _binding.SourceDefinition.Instance, typeof(BindableMonoBehaviour), true);
+            }
+            else
+            {
+                int selected = _sourceTypeCollection.IndexOf(_binding.SourceDefinition?.Type);
+                selected = EditorGUILayout.Popup("Source", selected, _sourceTypeCollection.Names.ToArray());
+                _binding.SourceDefinition.Type = _sourceTypeCollection.TypeAt(selected);
+            }
+
+            _binding.Target = EditorGUILayout.ObjectField("Target", _binding.Target, typeof(UnityObject), true);
 
             if (!_binding.HasSourceAndTarget)
             {
@@ -50,7 +70,7 @@ namespace UiBinding.Inspector
 
             sourceIndex.Index = EditorGUILayout.Popup("Source Property", sourceIndex.Index, Nicify(_sourceProperties.Names));
             targetIndex.Index = EditorGUILayout.Popup("Target Property", targetIndex.Index, Nicify(_targetProperties.Names));
-            _binding.BindingMode = (BindingMode)EditorGUILayout.Popup("Mode", (int)_binding.BindingMode, _bindingModes);
+            _binding.BindingMode = (BindingMode)EditorGUILayout.EnumPopup("Mode", _binding.BindingMode);
 
             if (!TwoWayAvailable && _binding.BindingMode == BindingMode.TwoWay)
             {

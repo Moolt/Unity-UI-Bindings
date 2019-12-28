@@ -15,10 +15,27 @@ namespace UiBinding.Core
         private PropertyInfo _targetProperty;
         private IValueConverter _converter;
 
-        protected override void Awake()
-        {
-            base.Awake();
+        public ConverterIdentifier ConverterIdentifier => _converterIndex;
 
+        public BindingMode BindingMode
+        {
+            get => _bindingMode;
+            set => _bindingMode = value;
+        }
+
+        public Type SourcePropertyType => _sourceProperty?.PropertyType;
+
+        public Type TargetPropertyType => _targetProperty?.PropertyType;
+
+        public bool HasMatchingTypes => TargetPropertyType != null && SourcePropertyType != null && TargetPropertyType == SourcePropertyType;
+
+        public override string ToString()
+        {
+            return $"{gameObject.name}: {SourceType.Name}::{_sourceProperty.Name} -> {TargetType.Name}::{_targetProperty.Name}";
+        }
+
+        protected override void OnEstablishBinding()
+        {
             // Resolve an actual PropertyInfo from the serialized index
             _sourceProperty = SourceIdentifier.ResolveFrom(Source);
             _targetProperty = TargetIdentifier.ResolveFrom(Target);
@@ -26,7 +43,7 @@ namespace UiBinding.Core
             // Listen for changes of the source
             if (_bindingMode != BindingMode.OneTime)
             {
-                SetupSourceBinding();
+                SetupSourceBinding(Source);
             }
 
             // Listen for changes of the target
@@ -43,25 +60,6 @@ namespace UiBinding.Core
             // Retrieve the initial value from the source.
             InitializeValue();
         }
-
-        private void OnDestroy()
-        {
-            Break();
-        }
-
-        public ConverterIdentifier ConverterIdentifier => _converterIndex;
-
-        public BindingMode BindingMode
-        {
-            get => _bindingMode;
-            set => _bindingMode = value;
-        }
-
-        public Type SourcePropertyType => _sourceProperty?.PropertyType;
-
-        public Type TargetPropertyType => _targetProperty?.PropertyType;
-
-        public bool HasMatchingTypes => TargetPropertyType != null && SourcePropertyType != null && TargetPropertyType == SourcePropertyType;
 
         private void OnSourceChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -90,14 +88,14 @@ namespace UiBinding.Core
             }
         }
 
-        private void SetupSourceBinding()
+        private void SetupSourceBinding(INotifyPropertyChanged source)
         {
-            INotifyPropertyChanged bindingSource = Source;
+            INotifyPropertyChanged bindingSource = source;
 
             // Enables support for types like observable collection.
             if (typeof(INotifyPropertyChanged).IsAssignableFrom(_sourceProperty.PropertyType))
             {
-                bindingSource = (INotifyPropertyChanged)_sourceProperty.GetValue(Source);
+                bindingSource = (INotifyPropertyChanged)_sourceProperty.GetValue(source);
             }
 
             bindingSource.PropertyChanged += OnSourceChanged;
@@ -105,11 +103,6 @@ namespace UiBinding.Core
             // Unregister the subscription if the binding breaks.
             var destructor = new DisposableAction(() => bindingSource.PropertyChanged -= OnSourceChanged);
             AddDestructor(destructor);
-        }
-
-        public override string ToString()
-        {
-            return $"{gameObject.name}: {SourceType.Name}::{_sourceProperty.Name} -> {TargetType.Name}::{_targetProperty.Name}";
         }
     }
 }

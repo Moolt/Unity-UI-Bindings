@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
 using UnityEngine.Events;
 
 namespace UiBinding.Core
@@ -19,5 +20,7 @@ namespace UiBinding.Core
         public static MethodFilter SourceCallbacks { get; } = new MethodFilter(MemberBindingFlags.Source, m => !m.IsSpecialName);
 
         public static PropertyFilter TargetEvents { get; } = new PropertyFilter(MemberBindingFlags.Target, m => typeof(UnityEventBase).IsAssignableFrom(m.PropertyType));
+
+        public static PropertyFilter Lists { get; } = new PropertyFilter(MemberBindingFlags.Source, m => typeof(IEnumerable).IsAssignableFrom(m.PropertyType));
     }
 }

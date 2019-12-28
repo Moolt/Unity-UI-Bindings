@@ -12,7 +12,7 @@ namespace UiBinding.Conversion
         {
             get
             {
-                var converters = Assembly
+                var converters = Assemblies.Core
                     .GetTypes()
                     .Where(t => typeof(IValueConverter).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract && t.HasDefaultConstructor())
                     .ToList();
@@ -37,8 +37,6 @@ namespace UiBinding.Conversion
         public static Type TypeOfConverterFor(ConverterIdentifier identifier)
         {
             return AvailableConverters.FirstOrDefault(c => c.Name == identifier);
-        }
-
-        private static Assembly Assembly => AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "Assembly-CSharp");
+        }        
     }
 }

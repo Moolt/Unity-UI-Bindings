@@ -54,21 +54,21 @@ namespace UiBinding.Core
             return _targetType == type;
         }
 
-        public MemberCollection<TMember> ChangeTargetTypeIfNecessary(Type type)
+        public bool ChangeTargetTypeIfNecessary(Type type)
         {
             if (Targets(type))
             {
-                return this;
+                return false;
             }
 
-            return ChangeTargetType(type);
+            ChangeTargetType(type);
+            return true;
         }
 
-        public MemberCollection<TMember> ChangeTargetType(Type type)
+        public void ChangeTargetType(Type type)
         {
             _targetType = type;
             Refresh();
-            return this;
         }
 
         public string[] Names => this.Select(p => p.Name).ToArray();
