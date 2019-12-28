@@ -6954,35 +6954,20 @@ MonoBehaviour:
     _name: SliderValue
     _valid: 1
   _targetIndex:
-    _name: rotation
+    _name: sprite
     _valid: 1
   _sourceDefinition:
     _kind: 0
     _type: 
-    _instance: {fileID: 0}
-  _target: {fileID: 1631948280}
+    _instance: {fileID: 706085932}
+  _target: {fileID: 1631948282}
   _converterIndex:
-    _name: FloatToRotationConverter
+    _name: DefaultConverter
     _valid: 1
     _properties:
-      _keys:
-      - _value: RotationAxis
-        _type: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      - _value: MinColor
-        _type: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      - _value: MaxColor
-        _type: System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-      _values:
-      - _value: '{"x":0.0,"y":0.0,"z":-1.0}'
-        _type: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-      - _value: '{"r":1.0,"g":0.0,"b":0.0,"a":1.0}'
-        _type: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-      - _value: '{"r":0.0,"g":0.0,"b":1.0,"a":1.0}'
-        _type: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-          PublicKeyToken=null
-  _bindingMode: 1
+      _keys: []
+      _values: []
+  _bindingMode: 0
 --- !u!114 &1631948282
 MonoBehaviour:
   m_ObjectHideFlags: 0
