@@ -43,6 +43,16 @@ namespace UiBinding.Core
             set => _prefabs = value;
         }
 
+        [ContextMenu("Update binding")]
+        public void UpdateBinding()
+        {
+            var copy = gameObject.AddComponent<ListBinding>();
+            copy.Source = Source;
+            copy.ListIdentifier = ListIdentifier;
+            copy.Prefabs = Prefabs;
+            DestroyImmediate(this);
+        }
+
         private void SetupSourceBinding()
         {
             INotifyPropertyChanged bindingSource = Source;

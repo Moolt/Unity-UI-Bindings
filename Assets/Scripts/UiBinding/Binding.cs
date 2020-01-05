@@ -89,7 +89,11 @@ namespace UiBinding.Core
             Break();
         }
 
-        public BindingMemberDefinition SourceDefinition => _sourceDefinition;
+        public BindingMemberDefinition SourceDefinition
+        {
+            get => _sourceDefinition;
+            private set => _sourceDefinition = value;
+        }
 
         public INotifyPropertyChanged Source
         {
@@ -165,6 +169,14 @@ namespace UiBinding.Core
             }
 
             _destructors.Clear();
+        }
+
+        public virtual void ApplyValuesOf(Binding<TSourceIndex, TTargetIndex> other)
+        {
+            SourceIdentifier = other.SourceIdentifier;
+            TargetIdentifier = other.TargetIdentifier;
+            SourceDefinition = other.SourceDefinition;
+            Target = other.Target;
         }
 
         protected void AddDestructor(IDisposable disposable)

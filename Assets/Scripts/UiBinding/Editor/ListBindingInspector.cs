@@ -2,6 +2,8 @@
 using System.Reflection;
 using UiBinding.Core;
 using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace UiBinding.Inspector
@@ -20,8 +22,14 @@ namespace UiBinding.Inspector
             _listProperty = serializedObject.FindProperty("_prefabs");
         }
 
+        private void OnValidate()
+        {
+            _binding.UpdateBinding();
+        }
+
         public override void OnInspectorGUI()
         {
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.Space();
 
             if (_listProperties.ChangeTargetTypeIfNecessary(_binding.SourceType))
@@ -74,11 +82,26 @@ namespace UiBinding.Inspector
             }
 
             serializedObject.ApplyModifiedProperties();
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                MarkDirty();
+            }
         }
 
         private string[] Nicify(string[] input)
         {
             return input.Select(s => ObjectNames.NicifyVariableName(s)).ToArray();
+        }
+
+        private void MarkDirty()
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+            if (prefabStage != null)
+            {
+                EditorSceneManager.MarkSceneDirty(prefabStage.scene);
+            }
         }
 
         private string TypeNameFromSerializeProperty(SerializedProperty property)

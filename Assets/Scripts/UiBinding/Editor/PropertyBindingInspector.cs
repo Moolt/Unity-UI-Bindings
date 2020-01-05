@@ -5,6 +5,7 @@ using System.Reflection;
 using UiBinding.Conversion;
 using UiBinding.Core;
 using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
@@ -22,10 +23,14 @@ namespace UiBinding.Inspector
         private void OnEnable()
         {
             _binding = target as PropertyBinding;
-
             _sourceTypeCollection = new TypeCollection<INotifyPropertyChanged>();
             _sourceProperties = new MemberCollection<PropertyInfo>(_binding.SourceType, MemberFilters.SourceProperties);
             _targetProperties = new MemberCollection<PropertyInfo>(_binding.TargetType, MemberFilters.TargetProperties);
+        }
+
+        private void OnValidate()
+        {
+            _binding.UpdateBinding();
         }
 
         public override void OnInspectorGUI()
@@ -158,7 +163,7 @@ namespace UiBinding.Inspector
 
             if (EditorGUI.EndChangeCheck())
             {
-                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+                MarkDirty();
             }
         }
 
@@ -181,6 +186,16 @@ namespace UiBinding.Inspector
             _binding.SourceIdentifier.Name = string.Empty;
             _binding.TargetIdentifier.Name = string.Empty;
             _binding.ConverterIdentifier.Name = ConverterIdentifier.Default;
+        }
+
+        private void MarkDirty()
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+            if (prefabStage != null)
+            {
+                EditorSceneManager.MarkSceneDirty(prefabStage.scene);
+            }
         }
 
         private bool TwoWayAvailable =>

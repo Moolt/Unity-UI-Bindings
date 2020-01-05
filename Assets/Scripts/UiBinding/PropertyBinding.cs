@@ -15,12 +15,37 @@ namespace UiBinding.Core
         private PropertyInfo _targetProperty;
         private IValueConverter _converter;
 
-        public ConverterIdentifier ConverterIdentifier => _converterIndex;
+        public ConverterIdentifier ConverterIdentifier
+        {
+            get => _converterIndex;
+            private set => _converterIndex = value;
+        }
 
         public BindingMode BindingMode
         {
             get => _bindingMode;
             set => _bindingMode = value;
+        }
+
+        [ContextMenu("Update binding")]
+        public void UpdateBinding()
+        {
+            var copy = gameObject.AddComponent<PropertyBinding>();
+            copy.ApplyValuesOf(this);
+            DestroyImmediate(this);
+        }
+
+        public override void ApplyValuesOf(Binding<PropertyIdentifier, PropertyIdentifier> other)
+        {
+            base.ApplyValuesOf(other);
+
+            if (!(other is PropertyBinding propertyBinding))
+            {
+                return;
+            }
+
+            ConverterIdentifier = propertyBinding.ConverterIdentifier;
+            BindingMode = propertyBinding.BindingMode;
         }
 
         public Type SourcePropertyType => _sourceProperty?.PropertyType;

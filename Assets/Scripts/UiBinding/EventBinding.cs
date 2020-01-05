@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using UnityEngine;
 
 namespace UiBinding.Core
 {
@@ -6,6 +7,14 @@ namespace UiBinding.Core
     {
         private MethodInfo _sourceCallback;
         private PropertyInfo _targetEvent;
+
+        [ContextMenu("Update binding")]
+        public void UpdateBinding()
+        {
+            var copy = gameObject.AddComponent<EventBinding>();
+            copy.ApplyValuesOf(this);
+            DestroyImmediate(this);
+        }
 
         protected override void OnEstablishBinding()
         {

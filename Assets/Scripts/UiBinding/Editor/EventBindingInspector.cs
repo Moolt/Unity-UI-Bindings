@@ -2,6 +2,7 @@
 using System.Reflection;
 using UiBinding.Core;
 using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
@@ -21,6 +22,11 @@ namespace UiBinding.Inspector
 
             _sourceCallbacks = new MemberCollection<MethodInfo>(_binding.SourceType, MemberFilters.SourceCallbacks);
             _targetEvents = new MemberCollection<PropertyInfo>(_binding.TargetType, MemberFilters.TargetEvents);
+        }
+
+        private void OnValidate()
+        {
+            _binding.UpdateBinding();
         }
 
         public override void OnInspectorGUI()
@@ -64,7 +70,7 @@ namespace UiBinding.Inspector
 
             if (EditorGUI.EndChangeCheck())
             {
-                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+                MarkDirty();
             }
         }
 
@@ -85,6 +91,16 @@ namespace UiBinding.Inspector
             rect.height = 1;
             EditorGUI.DrawRect(rect, new Color(0.5f, 0.5f, 0.5f, 1));
             EditorGUILayout.Space();
+        }
+
+        private void MarkDirty()
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+            if (prefabStage != null)
+            {
+                EditorSceneManager.MarkSceneDirty(prefabStage.scene);
+            }
         }
 
         private string[] Nicify(string[] input)
