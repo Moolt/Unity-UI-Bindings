@@ -43,7 +43,6 @@ namespace UiBinding.Core
             set => _prefabs = value;
         }
 
-        [ContextMenu("Update binding")]
         public void UpdateBinding()
         {
             var copy = gameObject.AddComponent<ListBinding>();

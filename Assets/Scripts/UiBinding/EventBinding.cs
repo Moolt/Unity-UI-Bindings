@@ -8,7 +8,6 @@ namespace UiBinding.Core
         private MethodInfo _sourceCallback;
         private PropertyInfo _targetEvent;
 
-        [ContextMenu("Update binding")]
         public void UpdateBinding()
         {
             var copy = gameObject.AddComponent<EventBinding>();

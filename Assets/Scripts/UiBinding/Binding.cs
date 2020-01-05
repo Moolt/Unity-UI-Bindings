@@ -64,7 +64,7 @@ namespace UiBinding.Core
             set => _target = value;
         }
 
-        public bool HasSource => _sourceDefinition != null;
+        public bool HasSource => _sourceDefinition.Kind == BindingMemberKind.Type || _sourceDefinition.Instance != null;
 
         public bool HasTarget => _target != null;
 

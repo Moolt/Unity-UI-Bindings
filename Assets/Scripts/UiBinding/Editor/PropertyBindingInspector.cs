@@ -30,6 +30,11 @@ namespace UiBinding.Inspector
 
         private void OnValidate()
         {
+            if (!IsPrefabStage)
+            {
+                return;
+            }
+
             _binding.UpdateBinding();
         }
 
@@ -197,6 +202,8 @@ namespace UiBinding.Inspector
                 EditorSceneManager.MarkSceneDirty(prefabStage.scene);
             }
         }
+
+        private bool IsPrefabStage => PrefabStageUtility.GetCurrentPrefabStage() != null;
 
         private bool TwoWayAvailable =>
             _binding != null &&

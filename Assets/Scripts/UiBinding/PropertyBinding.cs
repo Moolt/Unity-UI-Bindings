@@ -27,7 +27,6 @@ namespace UiBinding.Core
             set => _bindingMode = value;
         }
 
-        [ContextMenu("Update binding")]
         public void UpdateBinding()
         {
             var copy = gameObject.AddComponent<PropertyBinding>();
