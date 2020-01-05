@@ -6,58 +6,6 @@ using UnityObject = UnityEngine.Object;
 
 namespace UiBinding.Core
 {
-    [Serializable]
-    public enum BindingMemberKind
-    {
-        Instance,
-        Type,
-    }
-
-    [Serializable]
-    public class BindingMemberDefinition
-    {
-        [SerializeField] private BindingMemberKind _kind;
-        [SerializeField] private string _type = string.Empty;
-        [SerializeField] private BindableMonoBehaviour _instance;
-
-        public BindingMemberKind Kind
-        {
-            get => _kind;
-            set => _kind = value;
-        }
-
-        public string TypeName
-        {
-            get => _type;
-            set => _type = value;
-        }
-
-        public Type Type
-        {
-            get => Type.GetType(_type);
-            set => _type = value.AssemblyQualifiedName;
-        }
-
-        public BindableMonoBehaviour Instance
-        {
-            get => _instance;
-            set => _instance = value;
-        }
-    }
-
-    public interface IBinding
-    {
-        INotifyPropertyChanged Source { get; set; }
-
-        UnityObject Target { get; set; }
-
-        Type SourceType { get; }
-
-        Type TargetType { get; }
-
-        void Bind(INotifyPropertyChanged source);
-    }
-
     public abstract class Binding<TSourceIndex, TTargetIndex> : MonoBehaviour, IBinding
     {
         [SerializeField] private TSourceIndex _sourceIndex;
