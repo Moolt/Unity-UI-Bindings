@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -98,7 +99,10 @@ namespace UiBinding.Core
 
                 var prefab = _mapping[item.GetType()];
                 var instance = Instantiate(prefab, transform);
-                var bindings = instance.GetComponentsInChildren<IBinding>();
+                var bindings = instance
+                    .GetComponentsInChildren<IBinding>()
+                    .Where(b => b.SourceDefinition.Kind == BindingMemberKind.Type)
+                    .ToList();
 
                 foreach (var binding in bindings)
                 {

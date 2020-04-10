@@ -15,5 +15,7 @@ namespace UiBinding.Core
         Type TargetType { get; }
 
         void Bind(INotifyPropertyChanged source);
+
+        BindingMemberDefinition SourceDefinition { get; }
     }
 }

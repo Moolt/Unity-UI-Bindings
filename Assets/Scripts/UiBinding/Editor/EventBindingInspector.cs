@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using UiBinding.Core;
 using UnityEditor;
@@ -15,11 +16,13 @@ namespace UiBinding.Inspector
         [SerializeField] private EventBinding _binding;
         [SerializeField] private MemberCollection<MethodInfo> _sourceCallbacks;
         [SerializeField] private MemberCollection<PropertyInfo> _targetEvents;
+        [SerializeField] private TypeCollection<INotifyPropertyChanged> _sourceTypeCollection;
 
         private void OnEnable()
         {
             _binding = target as EventBinding;
 
+            _sourceTypeCollection = new TypeCollection<INotifyPropertyChanged>();
             _sourceCallbacks = new MemberCollection<MethodInfo>(_binding.SourceType, MemberFilters.SourceCallbacks);
             _targetEvents = new MemberCollection<PropertyInfo>(_binding.TargetType, MemberFilters.TargetEvents);
         }
@@ -42,7 +45,19 @@ namespace UiBinding.Inspector
             _targetEvents.ChangeTargetTypeIfNecessary(_binding.TargetType);
             _sourceCallbacks.ChangeTargetTypeIfNecessary(_binding.SourceType);
 
-            _binding.SourceDefinition.Instance = (BindableMonoBehaviour)EditorGUILayout.ObjectField("Source", _binding.SourceDefinition.Instance, typeof(BindableMonoBehaviour), true);
+            _binding.SourceDefinition.Kind = (BindingMemberKind)EditorGUILayout.EnumPopup("Reference", _binding.SourceDefinition.Kind);
+
+            if (_binding.SourceDefinition.Kind == BindingMemberKind.Instance)
+            {
+                _binding.SourceDefinition.Instance = (BindableMonoBehaviour)EditorGUILayout.ObjectField("Source", _binding.SourceDefinition.Instance, typeof(BindableMonoBehaviour), true);
+            }
+            else
+            {
+                int selected = _sourceTypeCollection.IndexOf(_binding.SourceDefinition?.Type);
+                selected = EditorGUILayout.Popup("Source", selected, _sourceTypeCollection.Names.ToArray());
+                _binding.SourceDefinition.Type = _sourceTypeCollection.TypeAt(selected);
+            }
+
             _binding.Target = EditorGUILayout.ObjectField("Target", _binding.Target, typeof(UnityObject), true);
 
             if (!_binding.HasSourceAndTarget)
