@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-namespace UiBinding.Core
+namespace UiBinding.Extensions
 {
     public static class ComponentExtensions
     {

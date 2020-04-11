@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using UiBinding.Core;
+using UiBinding.Extensions;
 
 namespace UiBinding.Conversion
 {

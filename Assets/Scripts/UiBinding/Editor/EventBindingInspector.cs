@@ -23,7 +23,7 @@ namespace UiBinding.Inspector
             _binding = target as EventBinding;
 
             _sourceTypeCollection = new TypeCollection<INotifyPropertyChanged>();
-            _sourceCallbacks = new MemberCollection<MethodInfo>(_binding.SourceType, MemberFilters.SourceCallbacks);
+            _sourceCallbacks = new MemberCollection<MethodInfo>(_binding.SourceType, MemberFilters.EventCallbacks);
             _targetEvents = new MemberCollection<PropertyInfo>(_binding.TargetType, MemberFilters.TargetEvents);
         }
 

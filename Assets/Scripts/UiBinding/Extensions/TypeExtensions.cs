@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UiBinding.Core
+namespace UiBinding.Extensions
 {
     public static class TypeExtensions
     {

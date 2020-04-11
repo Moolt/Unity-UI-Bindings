@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace UiBinding.Core
+namespace UiBinding.Extensions
 {
     public static class ExpressionExtensions
     {

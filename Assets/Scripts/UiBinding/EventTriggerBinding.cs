@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using UiBinding.Extensions;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -35,9 +37,24 @@ namespace UiBinding.Core
         protected override void OnEstablishBinding()
         {
             var methodInfo = SourceIdentifier.ResolveFrom(Source);
-            Action<BaseEventData> callback = b => methodInfo.Invoke(Source, new object[] { });
+            var callback = PrepareCallbackFor(methodInfo);
             Subscribe(callback);
             AddDestructor(new DisposableAction(RemoveSubscription));
+        }
+
+        private Action<BaseEventData> PrepareCallbackFor(MethodInfo method)
+        {
+            if (method.IsParameterless())
+            {
+                return b => method.Invoke(Source, new object[] { });
+            }
+
+            if (method.HasParameter<EventTriggerType>())
+            {
+                return b => method.Invoke(Source, new object[] { EventTriggerType });
+            }
+
+            throw new ArgumentException("Expected no parameter or EventTriggerType in callback.");
         }
 
         private void Subscribe(Action<BaseEventData> callback)

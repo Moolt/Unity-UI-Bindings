@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UiBinding.Extensions;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace UiBinding.Core
 {
     public static class MemberFilters
     {
-        private static readonly IList<PropertyInfo> MonoBehaviourTypes = typeof(MonoBehaviour).GetProperties(MemberBindingFlags.Source);
+        private static readonly IList<PropertyInfo> MonoBehaviourPropertyTypes = typeof(MonoBehaviour).GetProperties(MemberBindingFlags.Source);
+        private static readonly IList<MethodInfo> MonoBehaviourMethodTypes = typeof(MonoBehaviour).GetMethods(MemberBindingFlags.Source);
 
         private static class MemberBindingFlags
         {
@@ -22,7 +25,9 @@ namespace UiBinding.Core
 
         public static PropertyFilter TargetProperties { get; } = new PropertyFilter(MemberBindingFlags.Target);
 
-        public static MethodFilter SourceCallbacks { get; } = new MethodFilter(MemberBindingFlags.Source, m => !m.IsSpecialName);
+        public static MethodFilter EventCallbacks { get; } = new MethodFilter(MemberBindingFlags.Source, m => !m.IsSpecialName && m.IsParameterless() && !IsMonoBehaviourMethod(m));
+
+        public static MethodFilter EventTriggerCallbacks { get; } = new MethodFilter(MemberBindingFlags.Source, m => !m.IsSpecialName && (m.IsParameterless() || m.HasParameter<EventTriggerType>()) && !IsMonoBehaviourMethod(m));
 
         public static PropertyFilter TargetEvents { get; } = new PropertyFilter(MemberBindingFlags.Target, m => typeof(UnityEventBase).IsAssignableFrom(m.PropertyType));
 
@@ -30,7 +35,12 @@ namespace UiBinding.Core
 
         private static bool IsMonoBehaviourProperty(PropertyInfo property)
         {
-            return MonoBehaviourTypes.Any(p => p.Name == property.Name);
+            return MonoBehaviourPropertyTypes.Any(p => p.Name == property.Name);
+        }
+
+        private static bool IsMonoBehaviourMethod(MethodInfo method)
+        {
+            return MonoBehaviourMethodTypes.Any(p => p.Name == method.Name);
         }
     }
 }

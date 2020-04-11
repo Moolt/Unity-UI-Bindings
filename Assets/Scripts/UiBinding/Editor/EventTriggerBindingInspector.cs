@@ -21,7 +21,7 @@ namespace UiBinding.Inspector
         {
             _binding = target as EventTriggerBinding;
             _sourceTypeCollection = new TypeCollection<INotifyPropertyChanged>();
-            _sourceMethods = new MemberCollection<MethodInfo>(_binding.SourceType, MemberFilters.SourceCallbacks);
+            _sourceMethods = new MemberCollection<MethodInfo>(_binding.SourceType, MemberFilters.EventTriggerCallbacks);
         }
 
         private void OnValidate()
