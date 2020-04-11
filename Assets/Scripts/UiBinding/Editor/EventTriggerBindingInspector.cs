@@ -1,15 +1,12 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using UiBinding.Conversion;
 using UiBinding.Core;
 using UnityEditor;
 using UnityEditor.Experimental.SceneManagement;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityObject = UnityEngine.Object;
 
 namespace UiBinding.Inspector
 {

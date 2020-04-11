@@ -20,6 +20,7 @@ namespace UiBinding.Core
 
         protected virtual void Awake()
         {
+            BeforeAwake();
             Guard.AssertNotNull(gameObject, Target, "Binding target missing.");
 
             if (SourceDefinition.Kind == BindingMemberKind.Type)
@@ -30,6 +31,15 @@ namespace UiBinding.Core
             var instance = SourceDefinition.Instance;
             Guard.AssertNotNull(gameObject, instance, "Binding source missing.");
             Bind(instance);
+            AfterAwake();
+        }
+
+        protected virtual void BeforeAwake()
+        {
+        }
+
+        protected virtual void AfterAwake()
+        {
         }
 
         private void OnDestroy()
@@ -58,7 +68,7 @@ namespace UiBinding.Core
             }
         }
 
-        public UnityObject Target
+        public virtual UnityObject Target
         {
             get => _target;
             set => _target = value;
