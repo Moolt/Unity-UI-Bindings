@@ -1954,7 +1954,8 @@ MonoBehaviour:
     _valid: 1
   _sourceDefinition:
     _kind: 0
-    _type: 
+    _type: HoverButtonViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
     _instance: {fileID: 511103887}
   _target: {fileID: 511103888}
   _converterIndex:
@@ -1977,10 +1978,10 @@ MonoBehaviour:
       - _value: '{"r":0.0,"g":0.0,"b":1.0,"a":1.0}'
         _type: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
-      - _value: '{"r":1.0,"g":0.0,"b":0.0,"a":1.0}'
+      - _value: '{"r":1.0,"g":1.0,"b":1.0,"a":1.0}'
         _type: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
-      - _value: '{"r":0.0,"g":1.0,"b":0.0,"a":1.0}'
+      - _value: '{"r":0.7109212279319763,"g":0.8301886916160584,"b":0.6618013381958008,"a":1.0}'
         _type: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
           PublicKeyToken=null
   _bindingMode: 1
@@ -2013,7 +2014,8 @@ MonoBehaviour:
     _valid: 1
   _sourceDefinition:
     _kind: 0
-    _type: 
+    _type: HoverButtonViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
     _instance: {fileID: 511103887}
   _eventTriggerType: 0
 --- !u!114 &511103885
@@ -2033,7 +2035,8 @@ MonoBehaviour:
     _valid: 1
   _sourceDefinition:
     _kind: 0
-    _type: 
+    _type: HoverButtonViewModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
     _instance: {fileID: 511103887}
   _eventTriggerType: 1
 --- !u!114 &511103886

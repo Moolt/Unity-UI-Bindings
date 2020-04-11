@@ -31,6 +31,8 @@ namespace UiBinding.Core
             private set => _sourceDefinition = value;
         }
 
+        public bool HasSource => _sourceDefinition.Kind == BindingMemberKind.Type || _sourceDefinition.Instance != null;
+
         public INotifyPropertyChanged Source
         {
             get => _sourceDefinition.Kind == BindingMemberKind.Instance ? _sourceDefinition.Instance : _source;

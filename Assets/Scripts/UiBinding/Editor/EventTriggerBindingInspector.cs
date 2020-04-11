@@ -42,8 +42,12 @@ namespace UiBinding.Inspector
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.Space();
 
-            _binding.SourceDefinition.Kind = (BindingMemberKind)EditorGUILayout.EnumPopup("Reference", _binding.SourceDefinition.Kind);
+            if (_sourceMethods.ChangeTargetTypeIfNecessary(_binding.SourceType))
+            {
+                _binding.SourceIdentifier.Name = string.Empty;
+            }
 
+            _binding.SourceDefinition.Kind = (BindingMemberKind)EditorGUILayout.EnumPopup("Reference", _binding.SourceDefinition.Kind);
             _binding.EventTriggerType = (EventTriggerType)EditorGUILayout.EnumPopup("Trigger", _binding.EventTriggerType);
 
 
@@ -58,7 +62,7 @@ namespace UiBinding.Inspector
                 _binding.SourceDefinition.Type = _sourceTypeCollection.TypeAt(selected);
             }
 
-            if(_binding.Source == null)
+            if(!_binding.HasSource)
             {
                 ResetBinding();
                 return;
@@ -69,7 +73,6 @@ namespace UiBinding.Inspector
             if (_sourceMethods.Any())
             {
                 sourceIndex.Index = EditorGUILayout.Popup("Source Callback", sourceIndex.Index, Nicify(_sourceMethods.Names));
-
             }
             else
             {
