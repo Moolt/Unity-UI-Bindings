@@ -6,10 +6,10 @@ using UnityObject = UnityEngine.Object;
 
 namespace UiBinding.Core
 {
-    public abstract class Binding<TSourceIndex, TTargetIndex> : MonoBehaviour, IBinding
+    public abstract class Binding<TSourceIdentifier, TTargetIdentifier> : MonoBehaviour, IBinding
     {
-        [SerializeField] private TSourceIndex _sourceIndex;
-        [SerializeField] private TTargetIndex _targetIndex;
+        [SerializeField] private TSourceIdentifier _sourceIdentifier;
+        [SerializeField] private TTargetIdentifier _targetIdentifier;
 
         [SerializeField] private BindingMemberDefinition _sourceDefinition = new BindingMemberDefinition();
         [SerializeField] private UnityObject _target;
@@ -20,7 +20,7 @@ namespace UiBinding.Core
 
         protected virtual void Awake()
         {
-            AssertNotNull(Target, "Binding target missing.");
+            Guard.AssertNotNull(gameObject, Target, "Binding target missing.");
 
             if (SourceDefinition.Kind == BindingMemberKind.Type)
             {
@@ -28,7 +28,7 @@ namespace UiBinding.Core
             }
 
             var instance = SourceDefinition.Instance;
-            AssertNotNull(instance, "Binding source missing.");
+            Guard.AssertNotNull(gameObject, instance, "Binding source missing.");
             Bind(instance);
         }
 
@@ -84,16 +84,16 @@ namespace UiBinding.Core
 
         public Type TargetType => _target?.GetType();
 
-        public TSourceIndex SourceIdentifier
+        public TSourceIdentifier SourceIdentifier
         {
-            get => _sourceIndex;
-            set => _sourceIndex = value;
+            get => _sourceIdentifier;
+            set => _sourceIdentifier = value;
         }
 
-        public TTargetIndex TargetIdentifier
+        public TTargetIdentifier TargetIdentifier
         {
-            get => _targetIndex;
-            set => _targetIndex = value;
+            get => _targetIdentifier;
+            set => _targetIdentifier = value;
         }
 
         public virtual void Bind(INotifyPropertyChanged source)
@@ -119,7 +119,7 @@ namespace UiBinding.Core
             _destructors.Clear();
         }
 
-        public virtual void ApplyValuesOf(Binding<TSourceIndex, TTargetIndex> other)
+        public virtual void ApplyValuesOf(Binding<TSourceIdentifier, TTargetIdentifier> other)
         {
             SourceIdentifier = other.SourceIdentifier;
             TargetIdentifier = other.TargetIdentifier;
@@ -130,21 +130,6 @@ namespace UiBinding.Core
         protected void AddDestructor(IDisposable disposable)
         {
             _destructors.Add(disposable);
-        }
-
-        protected void AssertNotNull(object target, string message)
-        {
-            if (target is UnityObject unityObject && unityObject != null)
-            {
-                return;
-            }
-
-            if (target != null)
-            {
-                return;
-            }
-
-            throw new Exception($"{gameObject.name}: {message}");
         }
 
         protected abstract void OnEstablishBinding();

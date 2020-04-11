@@ -90,10 +90,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74059149b822f2c40ae30900c99efc0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sourceIndex:
+  _sourceIdentifier:
     _name: Details
     _valid: 1
-  _targetIndex:
+  _targetIdentifier:
     _name: text
     _valid: 1
   _sourceDefinition:
@@ -261,6 +261,16 @@ PrefabInstance:
       propertyPath: _sourceDefinition._type
       value: DetailedLabeledItem, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 3788193047446446512, guid: 297ea888b5157c346a5ca67bebdda949,
+        type: 3}
+      propertyPath: _sourceIdentifier._name
+      value: Text
+      objectReference: {fileID: 0}
+    - target: {fileID: 3788193047446446512, guid: 297ea888b5157c346a5ca67bebdda949,
+        type: 3}
+      propertyPath: _targetIdentifier._name
+      value: text
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 297ea888b5157c346a5ca67bebdda949, type: 3}

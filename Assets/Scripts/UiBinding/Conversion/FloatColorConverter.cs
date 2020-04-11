@@ -2,7 +2,7 @@
 
 namespace UiBinding.Conversion
 {
-    public class ColorConverter : ValueConverter<float, Color>
+    public class FloatColorConverter : ValueConverter<float, Color>
     {
         public override Color Convert(float value)
         {

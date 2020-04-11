@@ -90,10 +90,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74059149b822f2c40ae30900c99efc0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sourceIndex:
+  _sourceIdentifier:
     _name: Text
     _valid: 1
-  _targetIndex:
+  _targetIdentifier:
     _name: text
     _valid: 1
   _sourceDefinition:

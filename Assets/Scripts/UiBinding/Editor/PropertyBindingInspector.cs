@@ -78,8 +78,26 @@ namespace UiBinding.Inspector
             var sourceIndex = IndexedIdentifier.For(_binding.SourceIdentifier, _sourceProperties.Names);
             var targetIndex = IndexedIdentifier.For(_binding.TargetIdentifier, _targetProperties.Names);
 
-            sourceIndex.Index = EditorGUILayout.Popup("Source Property", sourceIndex.Index, Nicify(_sourceProperties.Names));
-            targetIndex.Index = EditorGUILayout.Popup("Target Property", targetIndex.Index, Nicify(_targetProperties.Names));
+            if(_sourceProperties.Any())
+            {
+                sourceIndex.Index = EditorGUILayout.Popup("Source Property", sourceIndex.Index, Nicify(_sourceProperties.Names));
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("No properties found in source.", MessageType.Info);
+                return;
+            }
+
+            if (_targetProperties.Any())
+            {
+                targetIndex.Index = EditorGUILayout.Popup("Target Property", targetIndex.Index, Nicify(_targetProperties.Names));
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("No properties found in target.", MessageType.Info);
+                return;
+            }
+
             _binding.BindingMode = (BindingMode)EditorGUILayout.EnumPopup("Mode", _binding.BindingMode);
 
             if (!TwoWayAvailable && _binding.BindingMode == BindingMode.TwoWay)

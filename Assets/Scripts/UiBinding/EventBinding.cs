@@ -2,7 +2,8 @@
 
 namespace UiBinding.Core
 {
-    public class EventBinding : Binding<MethodIdentifier, PropertyIdentifier>
+    public class EventBinding : Binding
+        <MethodIdentifier, PropertyIdentifier>
     {
         private MethodInfo _sourceCallback;
         private PropertyInfo _targetEvent;
